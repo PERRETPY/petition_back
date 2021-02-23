@@ -1,0 +1,11 @@
+<!-- Indices written at Tue, 23 Feb 2021 22:31:01 CET -->
+
+<datastore-indexes autoGenerate="true">
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Petition" ancestor="false" source="auto">
+        <property name="tag" direction="asc"/>
+        <property name="titre" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>
