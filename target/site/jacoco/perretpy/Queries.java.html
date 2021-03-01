@@ -56,7 +56,7 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L56">		} catch (EntityNotFoundException e1) {</span>
 			// TODO Auto-generated catch block
 <span class="nc" id="L58">			e1.printStackTrace();</span>
-<span class="nc" id="L59">		}</span>
+		}
 		
 		
 		
@@ -122,11 +122,11 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L122">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L123" title="All 2 branches missed.">		for (Entity entity : result) {</span>
 <span class="nc" id="L124">		    response.getWriter().print(entity.getProperty(&quot;firstName&quot;)+&quot;.&quot;);</span>
-<span class="nc" id="L125">		}</span>
+		}
 		
 		
 		
-<span class="nc" id="L129">		response.getWriter().print(&quot;&lt;h2&gt; Q2: now just print all petitions with only firstName projected.... &lt;/h2&gt;&quot;);	</span>
+<span class="nc" id="L129">		response.getWriter().print(&quot;&lt;h2&gt; Q3: now just print all petitions with only firstName projected.... &lt;/h2&gt;&quot;);	</span>
 		
 <span class="nc" id="L131">		long t2=System.currentTimeMillis();</span>
 		
@@ -139,18 +139,42 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L139">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpet.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L140" title="All 2 branches missed.">		for (Entity entity : resultpet) {</span>
 <span class="nc" id="L141">		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot;.&quot;+entity.getProperty(&quot;tag&quot;)+&quot;/&quot;);</span>
-<span class="nc" id="L142">		}</span>
+		}
 		
 		
 <span class="nc" id="L145">		long t3=System.currentTimeMillis();</span>
 
 <span class="nc" id="L147">		response.getWriter().print(&quot;&lt;h2&gt; time(Q1) &lt;/h2&gt;&quot;);		</span>
-<span class="nc" id="L148">		response.getWriter().print(&quot;q1:&quot;+(t2-t1));</span>
+<span class="nc" id="L148">		response.getWriter().print(&quot;q3:&quot;+(t2-t1));</span>
 		
 <span class="nc" id="L150">		response.getWriter().print(&quot;&lt;h2&gt; time(Q2) &lt;/h2&gt;&quot;);		</span>
-<span class="nc" id="L151">		response.getWriter().print(&quot;q2:&quot;+(t3-t2));</span>
+<span class="nc" id="L151">		response.getWriter().print(&quot;q3:&quot;+(t3-t2));</span>
+		
+		
+		
+		
+		
+		//Vote for petition
+<span class="nc" id="L158">		response.getWriter().print(&quot;&lt;h2&gt; You are User0 wich signed petitions : &lt;/h2&gt;&quot;);</span>
+<span class="nc" id="L159">		Query qPetU0 = new Query(&quot;Petition&quot;).setFilter(new FilterPredicate(&quot;signatories&quot;, FilterOperator.EQUAL, &quot;u0&quot;));</span>
+		
+<span class="nc" id="L161">		qPetU0.addProjection(new PropertyProjection(&quot;titre&quot;,String.class));</span>
+		
+<span class="nc" id="L163">		PreparedQuery pqPetU0 = datastore.prepare(qPetU0);</span>
+		
+		
+<span class="nc" id="L166">		List&lt;Entity&gt; result_qPetU0 = pqPetU0.asList(FetchOptions.Builder.withDefaults());</span>
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">		for (Entity entity : result_qPetU0) {</span>
+<span class="nc" id="L169">		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot;&lt;br&gt;&quot;);</span>
+		}
+		
+<span class="nc" id="L172">		response.getWriter().print(&quot;&lt;h3&gt; Entrez une pétition à signer entre 0 et 50 &lt;/h3&gt;&quot;);</span>
+<span class="nc" id="L173">		response.getWriter().print(&quot;&lt;h4&gt; Hormis les résultats précédents &lt;/h4&gt;&quot;);</span>
+		
+		
 
 		
-<span class="nc" id="L154">	}</span>
+<span class="nc" id="L178">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

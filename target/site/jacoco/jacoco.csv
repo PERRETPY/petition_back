@@ -1,4 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-petition,perretpy,HelloAppEngine,0,87,0,0,0,12,0,3,0,3
-petition,perretpy,PopulateServlet,209,0,4,0,21,0,4,0,2,0
-petition,perretpy,Queries,228,0,4,0,39,0,4,0,2,0
+petition,perretpy,HelloAppEngine,0,82,0,0,0,12,0,3,0,3
+petition,perretpy,PopulateServlet,246,0,6,0,30,0,5,0,2,0
+petition,perretpy,Queries,287,0,6,0,45,0,5,0,2,0
+petition,perretpy,petitionsAPI,26,0,0,0,7,0,2,0,2,0

@@ -31,6 +31,9 @@ public class PopulateServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		int nbUsers = 100;
+		int nbPetitions = 50;
 
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
@@ -40,9 +43,12 @@ public class PopulateServlet extends HttpServlet {
 				"Droits des migrants", "Justice pénale", "Education", "Handicap", "Droits humains", "Famille", "Patrimoine", "Autre"};
 
 		Random r = new Random();
+		Random nbSignatoriesR = new Random();
+		int nbSignatories;
 		
-		//Create 4 user
-		for (int i=0 ; i<4 ; i++) {
+		
+		//Create 1000 user
+		for (int i=0 ; i<nbUsers ; i++) {
 			Entity u = new Entity("User", "u" + i);
 			u.setProperty("firstName", "first" + i);
 			u.setProperty("lastName", "last" + i);
@@ -53,17 +59,39 @@ public class PopulateServlet extends HttpServlet {
 			response.getWriter().print("<li> created user:" + u.getKey() + "<br>");
 		}
 		
-		//Create 4 petitions
-		for (int j=0 ; j<4 ; j++) {
+		
+		
+		//Create [nbPetitions] petitions
+		for (int j=0 ; j<nbPetitions ; j++) {
 			Entity p = new Entity("Petition", "p" + j);
 			p.setProperty("titre", "titrePetition" + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
 			p.setProperty("tag", tagList[r.nextInt(14)]);
 			
+			nbSignatories = nbSignatoriesR.nextInt(19) + 1;
+			
+			HashSet<String> fset = new HashSet<String>();
+			while (fset.size() < nbSignatories) {
+				fset.add("u" + r.nextInt(nbUsers));
+			}
+			p.setProperty("signatories", fset);
+			
+			
+			
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			datastore.put(p);
 
-			response.getWriter().print("<li> created petition:" + p.getKey() + "<br>");
+			response.getWriter().print("<li> created petition:" + p.getKey() + "Signataire : " + p.getProperty("signatories") + "<br>");
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }

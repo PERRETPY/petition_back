@@ -126,7 +126,7 @@ public class Queries extends HttpServlet {
 		
 		
 		
-		response.getWriter().print("<h2> Q2: now just print all petitions with only firstName projected.... </h2>");	
+		response.getWriter().print("<h2> Q3: now just print all petitions with only firstName projected.... </h2>");	
 		
 		long t2=System.currentTimeMillis();
 		
@@ -145,10 +145,34 @@ public class Queries extends HttpServlet {
 		long t3=System.currentTimeMillis();
 
 		response.getWriter().print("<h2> time(Q1) </h2>");		
-		response.getWriter().print("q1:"+(t2-t1));
+		response.getWriter().print("q3:"+(t2-t1));
 		
 		response.getWriter().print("<h2> time(Q2) </h2>");		
-		response.getWriter().print("q2:"+(t3-t2));
+		response.getWriter().print("q3:"+(t3-t2));
+		
+		
+		
+		
+		
+		//Vote for petition
+		response.getWriter().print("<h2> You are User0 wich signed petitions : </h2>");
+		Query qPetU0 = new Query("Petition").setFilter(new FilterPredicate("signatories", FilterOperator.EQUAL, "u0"));
+		
+		qPetU0.addProjection(new PropertyProjection("titre",String.class));
+		
+		PreparedQuery pqPetU0 = datastore.prepare(qPetU0);
+		
+		
+		List<Entity> result_qPetU0 = pqPetU0.asList(FetchOptions.Builder.withDefaults());
+
+		for (Entity entity : result_qPetU0) {
+		    response.getWriter().print(entity.getProperty("titre")+"<br>");
+		}
+		
+		response.getWriter().print("<h3> Entrez une pétition à signer entre 0 et 50 </h3>");
+		response.getWriter().print("<h4> Hormis les résultats précédents </h4>");
+		
+		
 
 		
 	}

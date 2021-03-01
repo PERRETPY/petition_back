@@ -1,10 +1,16 @@
-<!-- Indices written at Tue, 23 Feb 2021 22:31:01 CET -->
+<!-- Indices written at Mon, 1 Mar 2021 16:39:10 CET -->
 
 <datastore-indexes autoGenerate="true">
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Petition" ancestor="false" source="auto">
         <property name="tag" direction="asc"/>
+        <property name="titre" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Petition" ancestor="false" source="auto">
+        <property name="signatories" direction="asc"/>
         <property name="titre" direction="asc"/>
     </datastore-index>
 

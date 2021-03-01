@@ -31,40 +31,68 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+<span class="nc" id="L35">		int nbUsers = 100;</span>
+<span class="nc" id="L36">		int nbPetitions = 50;</span>
 
-<span class="nc" id="L35">		response.setContentType(&quot;text/html&quot;);</span>
-<span class="nc" id="L36">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L38">		response.setContentType(&quot;text/html&quot;);</span>
+<span class="nc" id="L39">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
 		
 		//tag from change.org web site
-<span class="nc" id="L39">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
-				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};
+<span class="nc" id="L42">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
+<span class="nc" id="L43">				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};</span>
 
-<span class="nc" id="L42">		Random r = new Random();</span>
+<span class="nc" id="L45">		Random r = new Random();</span>
+<span class="nc" id="L46">		Random nbSignatoriesR = new Random();</span>
+		int nbSignatories;
 		
-		//Create 4 user
-<span class="nc bnc" id="L45" title="All 2 branches missed.">		for (int i=0 ; i&lt;4 ; i++) {</span>
-<span class="nc" id="L46">			Entity u = new Entity(&quot;User&quot;, &quot;u&quot; + i);</span>
-<span class="nc" id="L47">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
-<span class="nc" id="L48">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
+		
+		//Create 1000 user
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
+<span class="nc" id="L52">			Entity u = new Entity(&quot;User&quot;, &quot;u&quot; + i);</span>
+<span class="nc" id="L53">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
+<span class="nc" id="L54">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
 			
-<span class="nc" id="L50">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
-<span class="nc" id="L51">			datastore.put(u);</span>
+<span class="nc" id="L56">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+<span class="nc" id="L57">			datastore.put(u);</span>
 
-<span class="nc" id="L53">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L59">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
 		}
 		
-		//Create 4 petitions
-<span class="nc bnc" id="L57" title="All 2 branches missed.">		for (int j=0 ; j&lt;4 ; j++) {</span>
-<span class="nc" id="L58">			Entity p = new Entity(&quot;Petition&quot;, &quot;p&quot; + j);</span>
-<span class="nc" id="L59">			p.setProperty(&quot;titre&quot;, &quot;titrePetition&quot; + j);</span>
-<span class="nc" id="L60">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
-<span class="nc" id="L61">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(14)]);</span>
+		
+		
+		//Create [nbPetitions] petitions
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
+<span class="nc" id="L66">			Entity p = new Entity(&quot;Petition&quot;, &quot;p&quot; + j);</span>
+<span class="nc" id="L67">			p.setProperty(&quot;titre&quot;, &quot;titrePetition&quot; + j);</span>
+<span class="nc" id="L68">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
+<span class="nc" id="L69">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(14)]);</span>
 			
-<span class="nc" id="L63">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
-<span class="nc" id="L64">			datastore.put(p);</span>
+<span class="nc" id="L71">			nbSignatories = nbSignatoriesR.nextInt(19) + 1;</span>
+			
+<span class="nc" id="L73">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatories) {</span>
+<span class="nc" id="L75">				fset.add(&quot;u&quot; + r.nextInt(nbUsers));</span>
+			}
+<span class="nc" id="L77">			p.setProperty(&quot;signatories&quot;, fset);</span>
+			
+			
+			
+<span class="nc" id="L81">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+<span class="nc" id="L82">			datastore.put(p);</span>
 
-<span class="nc" id="L66">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L84">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
 		}
-<span class="nc" id="L68">	}</span>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+<span class="nc" id="L96">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
