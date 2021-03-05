@@ -64,7 +64,9 @@ public class PopulateServlet extends HttpServlet {
 		//Create [nbPetitions] petitions
 		for (int j=0 ; j<nbPetitions ; j++) {
 			Entity p = new Entity("Petition", "p" + j);
-			p.setProperty("titre", "titrePetition" + j);
+			String titre = "titrePetition";
+			if (j<10) { titre += "0"; } //facilite le tri sur le titre
+			p.setProperty("titre", titre + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
 			p.setProperty("tag", tagList[r.nextInt(14)]);
 			

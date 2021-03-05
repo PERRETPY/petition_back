@@ -64,24 +64,26 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 		//Create [nbPetitions] petitions
 <span class="nc bnc" id="L65" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
 <span class="nc" id="L66">			Entity p = new Entity(&quot;Petition&quot;, &quot;p&quot; + j);</span>
-<span class="nc" id="L67">			p.setProperty(&quot;titre&quot;, &quot;titrePetition&quot; + j);</span>
-<span class="nc" id="L68">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
-<span class="nc" id="L69">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(14)]);</span>
+<span class="nc" id="L67">			String titre = &quot;titrePetition&quot;;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			if (j&lt;10) { titre += &quot;0&quot;; } //facilite le tri sur le titre</span>
+<span class="nc" id="L69">			p.setProperty(&quot;titre&quot;, titre + j);</span>
+<span class="nc" id="L70">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
+<span class="nc" id="L71">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(14)]);</span>
 			
-<span class="nc" id="L71">			nbSignatories = nbSignatoriesR.nextInt(19) + 1;</span>
+<span class="nc" id="L73">			nbSignatories = nbSignatoriesR.nextInt(19) + 1;</span>
 			
-<span class="nc" id="L73">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatories) {</span>
-<span class="nc" id="L75">				fset.add(&quot;u&quot; + r.nextInt(nbUsers));</span>
+<span class="nc" id="L75">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatories) {</span>
+<span class="nc" id="L77">				fset.add(&quot;u&quot; + r.nextInt(nbUsers));</span>
 			}
-<span class="nc" id="L77">			p.setProperty(&quot;signatories&quot;, fset);</span>
+<span class="nc" id="L79">			p.setProperty(&quot;signatories&quot;, fset);</span>
 			
 			
 			
-<span class="nc" id="L81">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
-<span class="nc" id="L82">			datastore.put(p);</span>
+<span class="nc" id="L83">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+<span class="nc" id="L84">			datastore.put(p);</span>
 
-<span class="nc" id="L84">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L86">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
 		}
 		
 		
@@ -93,6 +95,6 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 		
 		
 		
-<span class="nc" id="L96">	}</span>
+<span class="nc" id="L98">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

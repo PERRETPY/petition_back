@@ -41,8 +41,10 @@ public class Queries extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 
-
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		
+	//Q1 : Existence of User0
 
 		response.getWriter().print("<h1> Friends Queries </h1>");;
 
@@ -59,58 +61,9 @@ public class Queries extends HttpServlet {
 		}
 		
 		
-		
-		
-		/*response.getWriter().print("<h2> all friends with firstname first0 ? </h2>");
-		
-		Query q = new Query("Friend").setFilter(new FilterPredicate("firstName", FilterOperator.EQUAL, "first0"));
+	//Q2 : All users with firstName projection	
 
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print("<li> result:" + result.size() + "<br>");
-		for (Entity entity : result) {
-			response.getWriter().print("<li>" + entity.getProperty("firstName") + "," + entity.getProperty("lastName")
-					+ "," + entity.getProperty("age"));
-		}
-
-
-		response.getWriter().print("<h2> all friends that have  f94 and f93 as friends and age >67 and age < 96  ? </h2>");
-		response.getWriter().print("<h3>need composite index ? </h3>");
-		
-		q = new Query("Friend")
-				.setFilter(CompositeFilterOperator.and(
-						new FilterPredicate("friends", FilterOperator.EQUAL, "f94"),
-						new FilterPredicate("friends", FilterOperator.EQUAL, "f93"),
-						new FilterPredicate("age", FilterOperator.GREATER_THAN_OR_EQUAL, 67),
-						new FilterPredicate("age", FilterOperator.LESS_THAN_OR_EQUAL, 96) //and >= ??
-						)); //and >= ??
-		
-		pq = datastore.prepare(q);
-		result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print("<li> result:" + result.size() + "<br>");
-		for (Entity entity : result) {
-			response.getWriter().print("<li>" + entity.getProperty("firstName"));
-		}
-
-
-		long t1=System.currentTimeMillis();
-
-
-		response.getWriter().print("<h2> Q1:just print all friends.... </h2>");		
-		q = new Query("Friend");
-		pq = datastore.prepare(q);
-		result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print("<li> result:" + result.size() + "<br>");
-		for (Entity entity : result) {
-		    response.getWriter().print(entity.getProperty("firstName")+";");
-		}
-		long t2=System.currentTimeMillis();*/
-
-		
-		response.getWriter().print("<h2> Q2: now just print all users with only firstName projected.... </h2>");	
+		response.getWriter().print("<h2> Q2: All users with firstName projection </h2>");	
 		
 		long t1=System.currentTimeMillis();
 		
@@ -121,59 +74,88 @@ public class Queries extends HttpServlet {
 
 		response.getWriter().print("<li> result:" + result.size() + "<br>");
 		for (Entity entity : result) {
-		    response.getWriter().print(entity.getProperty("firstName")+".");
+		    response.getWriter().print(entity.getProperty("firstName")+"<br>");
 		}
 		
 		
+	//Q3 : All petitions with title and tag projection
 		
-		response.getWriter().print("<h2> Q3: now just print all petitions with only firstName projected.... </h2>");	
+		response.getWriter().print("<h2> Q3: All petitions with title and tag projection </h2>");	
 		
 		long t2=System.currentTimeMillis();
 		
 		Query qpet = new Query("Petition");
 		qpet.addProjection(new PropertyProjection("titre",String.class));
 		qpet.addProjection(new PropertyProjection("tag",String.class));
+		qpet.addSort("titre");
 		PreparedQuery pqpet = datastore.prepare(qpet);
 		List<Entity> resultpet = pqpet.asList(FetchOptions.Builder.withDefaults());
 
 		response.getWriter().print("<li> result:" + resultpet.size() + "<br>");
 		for (Entity entity : resultpet) {
-		    response.getWriter().print(entity.getProperty("titre")+"."+entity.getProperty("tag")+"/");
+		    response.getWriter().print(entity.getProperty("titre")+" : "+entity.getProperty("tag")+"<br>");
 		}
-		
-		
 		long t3=System.currentTimeMillis();
-
-		response.getWriter().print("<h2> time(Q1) </h2>");		
-		response.getWriter().print("q3:"+(t2-t1));
-		
-		response.getWriter().print("<h2> time(Q2) </h2>");		
-		response.getWriter().print("q3:"+(t3-t2));
 		
 		
+	//Print timing of Q2 and Q3
+		
+		response.getWriter().print("<h2> Timer </h2>");	
+		
+		response.getWriter().print("<li> Q2 : "+(t2-t1)+"ms");
+		
+		response.getWriter().print("<li> Q3 : "+(t3-t2)+"ms");
 		
 		
+	//Q4 : Petitions with "Environnement" title projection
 		
-		//Vote for petition
-		response.getWriter().print("<h2> You are User0 wich signed petitions : </h2>");
-		Query qPetU0 = new Query("Petition").setFilter(new FilterPredicate("signatories", FilterOperator.EQUAL, "u0"));
+		response.getWriter().print("<h2> Q4: now just print petitions with tag Environnement (titre and tag projected) </h2>");
 		
-		qPetU0.addProjection(new PropertyProjection("titre",String.class));
+		Query qpetTag = new Query("Petition");
+		qpetTag.setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, "Environnement"));
+		//qpetTag.addProjection(new PropertyProjection("titre", String.class));
 		
-		PreparedQuery pqPetU0 = datastore.prepare(qPetU0);
+		PreparedQuery pqpetTag = datastore.prepare(qpetTag);
+		List<Entity> resultpetTag = pqpetTag.asList(FetchOptions.Builder.withDefaults());
 		
-		
-		List<Entity> result_qPetU0 = pqPetU0.asList(FetchOptions.Builder.withDefaults());
-
-		for (Entity entity : result_qPetU0) {
-		    response.getWriter().print(entity.getProperty("titre")+"<br>");
+		response.getWriter().print("<li> result:" + resultpetTag.size() + "<br>");
+		for (Entity entity : resultpetTag) {
+			response.getWriter().print(entity.getProperty("titre")+" : "+entity.getProperty("tag")+"<br>");
 		}
 		
-		response.getWriter().print("<h3> Entrez une pétition à signer entre 0 et 50 </h3>");
-		response.getWriter().print("<h4> Hormis les résultats précédents </h4>");
+	
+	//Q5 : Petitions signed by User0
+		
+		response.getWriter().print("<h2> Q5: Petitions signed by User0 </h2>");
+		
+		Query qpetUser = new Query("Petition");
+		qpetUser.setFilter(new FilterPredicate("signatories", FilterOperator.EQUAL, "u0"));
+		qpetUser.addProjection(new PropertyProjection("titre", String.class));
+		
+		PreparedQuery pqpetUser = datastore.prepare(qpetUser);
+		List<Entity> resultpetUser = pqpetUser.asList(FetchOptions.Builder.withDefaults());
+		
+		response.getWriter().print("<li> result:" + resultpetUser.size() + "<br>");
+		for (Entity entity : resultpetUser) {
+			response.getWriter().print(entity.getProperty("titre") + " <br>");
+		}
 		
 		
+	//10 Petitions more signed
+		
+		/*response.getWriter().print("<h2> Q6: 10 Petitions more signed (NOT WORK) </h2>");	
+		
+		Query qpetMoreSigned = new Query("Petition");
+		qpetMoreSigned.addProjection(new PropertyProjection("titre",String.class));
+		//qpetMoreSigned.addSort("signatories", null);
+		//qpetMoreSigned.setOrderBy(OrderBy.desc("priority"));
+		
+		PreparedQuery pqpetMoreSigned = datastore.prepare(qpetMoreSigned);
+		List<Entity> resultpetMoreSigned = pqpetMoreSigned.asList(FetchOptions.Builder.withDefaults());
 
-		
+		response.getWriter().print("<li> result:" + resultpetMoreSigned.size() + "<br>");
+		for (Entity entity : resultpetMoreSigned) {
+		    response.getWriter().print(entity.getProperty("titre")+"."+entity.getProperty("tag")+"/");
+		}*/	
 	}
 }

@@ -41,140 +41,122 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L41">		response.setContentType(&quot;text/html&quot;);</span>
 <span class="nc" id="L42">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
 
+<span class="nc" id="L44">		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+		
+		
+	//Q1 : Existence of User0
 
-<span class="nc" id="L45">		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+<span class="nc" id="L49">		response.getWriter().print(&quot;&lt;h1&gt; Friends Queries &lt;/h1&gt;&quot;);;</span>
 
-<span class="nc" id="L47">		response.getWriter().print(&quot;&lt;h1&gt; Friends Queries &lt;/h1&gt;&quot;);;</span>
-
-<span class="nc" id="L49">		response.getWriter().print(&quot;&lt;h2&gt; is f0 exist ? &lt;/h2&gt;&quot;);</span>
+<span class="nc" id="L51">		response.getWriter().print(&quot;&lt;h2&gt; is f0 exist ? &lt;/h2&gt;&quot;);</span>
 
 		
-<span class="nc" id="L52">		Entity e=new Entity(&quot;User&quot;,&quot;u0&quot;);</span>
+<span class="nc" id="L54">		Entity e=new Entity(&quot;User&quot;,&quot;u0&quot;);</span>
 		try {
-<span class="nc" id="L54">			Entity e1=datastore.get(e.getKey());</span>
-<span class="nc" id="L55">			response.getWriter().print(&quot;&lt;li&gt; Get F0:&quot; + e1.getProperty(&quot;firstName&quot;));</span>
-<span class="nc" id="L56">		} catch (EntityNotFoundException e1) {</span>
+<span class="nc" id="L56">			Entity e1=datastore.get(e.getKey());</span>
+<span class="nc" id="L57">			response.getWriter().print(&quot;&lt;li&gt; Get F0:&quot; + e1.getProperty(&quot;firstName&quot;));</span>
+<span class="nc" id="L58">		} catch (EntityNotFoundException e1) {</span>
 			// TODO Auto-generated catch block
-<span class="nc" id="L58">			e1.printStackTrace();</span>
+<span class="nc" id="L60">			e1.printStackTrace();</span>
 		}
 		
 		
+	//Q2 : All users with firstName projection	
+
+<span class="nc" id="L66">		response.getWriter().print(&quot;&lt;h2&gt; Q2: All users with firstName projection &lt;/h2&gt;&quot;);	</span>
 		
+<span class="nc" id="L68">		long t1=System.currentTimeMillis();</span>
 		
-		/*response.getWriter().print(&quot;&lt;h2&gt; all friends with firstname first0 ? &lt;/h2&gt;&quot;);
-		
-		Query q = new Query(&quot;Friend&quot;).setFilter(new FilterPredicate(&quot;firstName&quot;, FilterOperator.EQUAL, &quot;first0&quot;));
+<span class="nc" id="L70">		Query q = new Query(&quot;User&quot;);</span>
+<span class="nc" id="L71">		q.addProjection(new PropertyProjection(&quot;firstName&quot;,String.class));</span>
+<span class="nc" id="L72">		PreparedQuery pq = datastore.prepare(q);</span>
+<span class="nc" id="L73">		List&lt;Entity&gt; result = pq.asList(FetchOptions.Builder.withDefaults());</span>
 
-		PreparedQuery pq = datastore.prepare(q);
-		List&lt;Entity&gt; result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);
-		for (Entity entity : result) {
-			response.getWriter().print(&quot;&lt;li&gt;&quot; + entity.getProperty(&quot;firstName&quot;) + &quot;,&quot; + entity.getProperty(&quot;lastName&quot;)
-					+ &quot;,&quot; + entity.getProperty(&quot;age&quot;));
-		}
-
-
-		response.getWriter().print(&quot;&lt;h2&gt; all friends that have  f94 and f93 as friends and age &gt;67 and age &lt; 96  ? &lt;/h2&gt;&quot;);
-		response.getWriter().print(&quot;&lt;h3&gt;need composite index ? &lt;/h3&gt;&quot;);
-		
-		q = new Query(&quot;Friend&quot;)
-				.setFilter(CompositeFilterOperator.and(
-						new FilterPredicate(&quot;friends&quot;, FilterOperator.EQUAL, &quot;f94&quot;),
-						new FilterPredicate(&quot;friends&quot;, FilterOperator.EQUAL, &quot;f93&quot;),
-						new FilterPredicate(&quot;age&quot;, FilterOperator.GREATER_THAN_OR_EQUAL, 67),
-						new FilterPredicate(&quot;age&quot;, FilterOperator.LESS_THAN_OR_EQUAL, 96) //and &gt;= ??
-						)); //and &gt;= ??
-		
-		pq = datastore.prepare(q);
-		result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);
-		for (Entity entity : result) {
-			response.getWriter().print(&quot;&lt;li&gt;&quot; + entity.getProperty(&quot;firstName&quot;));
-		}
-
-
-		long t1=System.currentTimeMillis();
-
-
-		response.getWriter().print(&quot;&lt;h2&gt; Q1:just print all friends.... &lt;/h2&gt;&quot;);		
-		q = new Query(&quot;Friend&quot;);
-		pq = datastore.prepare(q);
-		result = pq.asList(FetchOptions.Builder.withDefaults());
-
-		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);
-		for (Entity entity : result) {
-		    response.getWriter().print(entity.getProperty(&quot;firstName&quot;)+&quot;;&quot;);
-		}
-		long t2=System.currentTimeMillis();*/
-
-		
-<span class="nc" id="L113">		response.getWriter().print(&quot;&lt;h2&gt; Q2: now just print all users with only firstName projected.... &lt;/h2&gt;&quot;);	</span>
-		
-<span class="nc" id="L115">		long t1=System.currentTimeMillis();</span>
-		
-<span class="nc" id="L117">		Query q = new Query(&quot;User&quot;);</span>
-<span class="nc" id="L118">		q.addProjection(new PropertyProjection(&quot;firstName&quot;,String.class));</span>
-<span class="nc" id="L119">		PreparedQuery pq = datastore.prepare(q);</span>
-<span class="nc" id="L120">		List&lt;Entity&gt; result = pq.asList(FetchOptions.Builder.withDefaults());</span>
-
-<span class="nc" id="L122">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">		for (Entity entity : result) {</span>
-<span class="nc" id="L124">		    response.getWriter().print(entity.getProperty(&quot;firstName&quot;)+&quot;.&quot;);</span>
+<span class="nc" id="L75">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		for (Entity entity : result) {</span>
+<span class="nc" id="L77">		    response.getWriter().print(entity.getProperty(&quot;firstName&quot;)+&quot;&lt;br&gt;&quot;);</span>
 		}
 		
 		
+	//Q3 : All petitions with title and tag projection
 		
-<span class="nc" id="L129">		response.getWriter().print(&quot;&lt;h2&gt; Q3: now just print all petitions with only firstName projected.... &lt;/h2&gt;&quot;);	</span>
+<span class="nc" id="L83">		response.getWriter().print(&quot;&lt;h2&gt; Q3: All petitions with title and tag projection &lt;/h2&gt;&quot;);	</span>
 		
-<span class="nc" id="L131">		long t2=System.currentTimeMillis();</span>
+<span class="nc" id="L85">		long t2=System.currentTimeMillis();</span>
 		
-<span class="nc" id="L133">		Query qpet = new Query(&quot;Petition&quot;);</span>
-<span class="nc" id="L134">		qpet.addProjection(new PropertyProjection(&quot;titre&quot;,String.class));</span>
-<span class="nc" id="L135">		qpet.addProjection(new PropertyProjection(&quot;tag&quot;,String.class));</span>
-<span class="nc" id="L136">		PreparedQuery pqpet = datastore.prepare(qpet);</span>
-<span class="nc" id="L137">		List&lt;Entity&gt; resultpet = pqpet.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc" id="L87">		Query qpet = new Query(&quot;Petition&quot;);</span>
+<span class="nc" id="L88">		qpet.addProjection(new PropertyProjection(&quot;titre&quot;,String.class));</span>
+<span class="nc" id="L89">		qpet.addProjection(new PropertyProjection(&quot;tag&quot;,String.class));</span>
+<span class="nc" id="L90">		qpet.addSort(&quot;titre&quot;);</span>
+<span class="nc" id="L91">		PreparedQuery pqpet = datastore.prepare(qpet);</span>
+<span class="nc" id="L92">		List&lt;Entity&gt; resultpet = pqpet.asList(FetchOptions.Builder.withDefaults());</span>
 
-<span class="nc" id="L139">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpet.size() + &quot;&lt;br&gt;&quot;);</span>
-<span class="nc bnc" id="L140" title="All 2 branches missed.">		for (Entity entity : resultpet) {</span>
-<span class="nc" id="L141">		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot;.&quot;+entity.getProperty(&quot;tag&quot;)+&quot;/&quot;);</span>
+<span class="nc" id="L94">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpet.size() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		for (Entity entity : resultpet) {</span>
+<span class="nc" id="L96">		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot; : &quot;+entity.getProperty(&quot;tag&quot;)+&quot;&lt;br&gt;&quot;);</span>
+		}
+<span class="nc" id="L98">		long t3=System.currentTimeMillis();</span>
+		
+		
+	//Print timing of Q2 and Q3
+		
+<span class="nc" id="L103">		response.getWriter().print(&quot;&lt;h2&gt; Timer &lt;/h2&gt;&quot;);	</span>
+		
+<span class="nc" id="L105">		response.getWriter().print(&quot;&lt;li&gt; Q2 : &quot;+(t2-t1)+&quot;ms&quot;);</span>
+		
+<span class="nc" id="L107">		response.getWriter().print(&quot;&lt;li&gt; Q3 : &quot;+(t3-t2)+&quot;ms&quot;);</span>
+		
+		
+	//Q4 : Petitions with &quot;Environnement&quot; tag and title projection
+		
+<span class="nc" id="L112">		response.getWriter().print(&quot;&lt;h2&gt; Q4: now just print petitions with tag Environnement (titre and tag projected) &lt;/h2&gt;&quot;);</span>
+		
+<span class="nc" id="L114">		Query qpetTag = new Query(&quot;Petition&quot;);</span>
+<span class="nc" id="L115">		qpetTag.setFilter(new FilterPredicate(&quot;tag&quot;, FilterOperator.EQUAL, &quot;Environnement&quot;));</span>
+		//qpetTag.addProjection(new PropertyProjection(&quot;titre&quot;, String.class));
+		
+<span class="nc" id="L118">		PreparedQuery pqpetTag = datastore.prepare(qpetTag);</span>
+<span class="nc" id="L119">		List&lt;Entity&gt; resultpetTag = pqpetTag.asList(FetchOptions.Builder.withDefaults());</span>
+		
+<span class="nc" id="L121">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpetTag.size() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		for (Entity entity : resultpetTag) {</span>
+<span class="nc" id="L123">			response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot; : &quot;+entity.getProperty(&quot;tag&quot;)+&quot;&lt;br&gt;&quot;);</span>
+		}
+		
+	
+	//Q5 : Petitions signed by User0
+		
+<span class="nc" id="L129">		response.getWriter().print(&quot;&lt;h2&gt; Q5: Petitions signed by User0 &lt;/h2&gt;&quot;);</span>
+		
+<span class="nc" id="L131">		Query qpetUser = new Query(&quot;Petition&quot;);</span>
+<span class="nc" id="L132">		qpetUser.setFilter(new FilterPredicate(&quot;signatories&quot;, FilterOperator.EQUAL, &quot;u0&quot;));</span>
+<span class="nc" id="L133">		qpetUser.addProjection(new PropertyProjection(&quot;titre&quot;, String.class));</span>
+		
+<span class="nc" id="L135">		PreparedQuery pqpetUser = datastore.prepare(qpetUser);</span>
+<span class="nc" id="L136">		List&lt;Entity&gt; resultpetUser = pqpetUser.asList(FetchOptions.Builder.withDefaults());</span>
+		
+<span class="nc" id="L138">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpetUser.size() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">		for (Entity entity : resultpetUser) {</span>
+<span class="nc" id="L140">			response.getWriter().print(entity.getProperty(&quot;titre&quot;) + &quot; &lt;br&gt;&quot;);</span>
 		}
 		
 		
-<span class="nc" id="L145">		long t3=System.currentTimeMillis();</span>
+	//10 Petitions more signed
+		
+		/*response.getWriter().print(&quot;&lt;h2&gt; Q6: 10 Petitions more signed (NOT WORK) &lt;/h2&gt;&quot;);	
+		
+		Query qpetMoreSigned = new Query(&quot;Petition&quot;);
+		qpetMoreSigned.addProjection(new PropertyProjection(&quot;titre&quot;,String.class));
+		//qpetMoreSigned.addSort(&quot;signatories&quot;, null);
+		//qpetMoreSigned.setOrderBy(OrderBy.desc(&quot;priority&quot;));
+		
+		PreparedQuery pqpetMoreSigned = datastore.prepare(qpetMoreSigned);
+		List&lt;Entity&gt; resultpetMoreSigned = pqpetMoreSigned.asList(FetchOptions.Builder.withDefaults());
 
-<span class="nc" id="L147">		response.getWriter().print(&quot;&lt;h2&gt; time(Q1) &lt;/h2&gt;&quot;);		</span>
-<span class="nc" id="L148">		response.getWriter().print(&quot;q3:&quot;+(t2-t1));</span>
-		
-<span class="nc" id="L150">		response.getWriter().print(&quot;&lt;h2&gt; time(Q2) &lt;/h2&gt;&quot;);		</span>
-<span class="nc" id="L151">		response.getWriter().print(&quot;q3:&quot;+(t3-t2));</span>
-		
-		
-		
-		
-		
-		//Vote for petition
-<span class="nc" id="L158">		response.getWriter().print(&quot;&lt;h2&gt; You are User0 wich signed petitions : &lt;/h2&gt;&quot;);</span>
-<span class="nc" id="L159">		Query qPetU0 = new Query(&quot;Petition&quot;).setFilter(new FilterPredicate(&quot;signatories&quot;, FilterOperator.EQUAL, &quot;u0&quot;));</span>
-		
-<span class="nc" id="L161">		qPetU0.addProjection(new PropertyProjection(&quot;titre&quot;,String.class));</span>
-		
-<span class="nc" id="L163">		PreparedQuery pqPetU0 = datastore.prepare(qPetU0);</span>
-		
-		
-<span class="nc" id="L166">		List&lt;Entity&gt; result_qPetU0 = pqPetU0.asList(FetchOptions.Builder.withDefaults());</span>
-
-<span class="nc bnc" id="L168" title="All 2 branches missed.">		for (Entity entity : result_qPetU0) {</span>
-<span class="nc" id="L169">		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot;&lt;br&gt;&quot;);</span>
-		}
-		
-<span class="nc" id="L172">		response.getWriter().print(&quot;&lt;h3&gt; Entrez une pétition à signer entre 0 et 50 &lt;/h3&gt;&quot;);</span>
-<span class="nc" id="L173">		response.getWriter().print(&quot;&lt;h4&gt; Hormis les résultats précédents &lt;/h4&gt;&quot;);</span>
-		
-		
-
-		
-<span class="nc" id="L178">	}</span>
+		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpetMoreSigned.size() + &quot;&lt;br&gt;&quot;);
+		for (Entity entity : resultpetMoreSigned) {
+		    response.getWriter().print(entity.getProperty(&quot;titre&quot;)+&quot;.&quot;+entity.getProperty(&quot;tag&quot;)+&quot;/&quot;);
+		}*/	
+<span class="nc" id="L160">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
