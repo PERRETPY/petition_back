@@ -1,11 +1,19 @@
 package perretpy;
 
 import java.io.IOException;
+<<<<<<< Updated upstream
+=======
+import java.time.LocalDate;
+>>>>>>> Stashed changes
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+<<<<<<< Updated upstream
 import java.util.Set;
+=======
+import java.util.concurrent.ThreadLocalRandom;
+>>>>>>> Stashed changes
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +42,8 @@ public class PopulateServlet extends HttpServlet {
 		
 		int nbUsers = 100;
 		int nbPetitions = 50;
+		LocalDate startDate = LocalDate.of(2010, 1, 1); //start date for date of user creation
+		LocalDate endDate = LocalDate.now(); //end date for date of user creation
 
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
@@ -44,56 +54,86 @@ public class PopulateServlet extends HttpServlet {
 
 		Random r = new Random();
 		Random nbSignatoriesR = new Random();
-		int nbSignatories;
+		ArrayList<String> allPetitions = new ArrayList<String>();
 		
-		
-		//Create 1000 user
-		for (int i=0 ; i<nbUsers ; i++) {
-			Entity u = new Entity("User", "u" + i);
-			u.setProperty("firstName", "first" + i);
-			u.setProperty("lastName", "last" + i);
-			
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			datastore.put(u);
 
-			response.getWriter().print("<li> created user:" + u.getKey() + "<br>");
-		}
-		
-		
 		
 		//Create [nbPetitions] petitions
 		for (int j=0 ; j<nbPetitions ; j++) {
-			Entity p = new Entity("Petition", "p" + j);
-			String titre = "titrePetition";
-			if (j<10) { titre += "0"; } //facilite le tri sur le titre
-			p.setProperty("titre", titre + j);
+			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
+			LocalDate petitionCreation = randomDateBetween(startDate, endDate);
+			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();
+			//Force the petition number to be on two digits to facilitate sort by title
+			String title = "titrePetition";
+			if (j<10) { title += "0"; }; 
+			
+			
+			//Add key to tab for random signature
+			String key = reverseDatePetitionCreation + "p" + j;
+			allPetitions.add(key);
+			
+			
+			//Petition creation
+			Entity p = new Entity("Petition", key);
+			p.setProperty("title", title + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
-			p.setProperty("tag", tagList[r.nextInt(14)]);
-			
-			nbSignatories = nbSignatoriesR.nextInt(19) + 1;
-			
-			HashSet<String> fset = new HashSet<String>();
-			while (fset.size() < nbSignatories) {
-				fset.add("u" + r.nextInt(nbUsers));
-			}
-			p.setProperty("signatories", fset);
+			p.setProperty("tag", tagList[r.nextInt(tagList.length + 1)]);
 			
 			
-			
+			//Put petition into data store
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			datastore.put(p);
-
 			response.getWriter().print("<li> created petition:" + p.getKey() + "Signataire : " + p.getProperty("signatories") + "<br>");
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
+		//Create [nbUsers] user
+		for (int i=0 ; i<nbUsers ; i++) {
+			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
+			LocalDate userCreation = randomDateBetween(startDate, endDate);
+			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();
+			
+			
+			//User creation
+			Entity u = new Entity("User", reverseDateUserCreation + "u" + i);
+			u.setProperty("firstName", "first" + i);
+			u.setProperty("lastName", "last" + i);
+			u.setProperty("mail", "first" + i + ".last" + i + "@exemple.com");
+		    
+			
+			//Put user into data store
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			datastore.put(u);
+			response.getWriter().print("<li> created user:" + u.getKey() + "<br>");
+			
+			
+			//Signatures creation
+			Entity signatureBloc = new Entity("Signatures", u.getKey());
+			HashSet<String> fset = new HashSet<String>();
+			while (fset.size() < nbSignatoriesR.nextInt(20)) {
+				fset.add(allPetitions.get(r.nextInt(allPetitions.size())).toString());
+			}
+			signatureBloc.setProperty("petitions", fset);
+			
+			
+			//Put signature bloc into data store
+			datastore.put(signatureBloc);
+		}
 	}
+	
+	
+	/**
+	* Return an random date between startDate and endDate 
+	*
+	* @param  startDate	LocalDate 
+	* @param  endDate	LocalDate
+	* @return LocalDate between startDate and endDate
+	*/
+	public LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate){
+		long start = startDate.toEpochDay();
+		long end = endDate.toEpochDay();
+		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
+		return LocalDate.ofEpochDay(randomEpochDay);
+	}
+	
 }
