@@ -1,18 +1,10 @@
 indexes:
-
-- kind: User 
-  properties: 
-    - name: name
-    
-- kind: Petition
-  properties:
-    - name: name
-    
-- kind: Petition
-  properties:
-    - name: tag
-    
-- kind: Petition
-  properties:
-    - name: signatories
-    
+  - kind: Petition
+    properties:
+      - name: titre
+      - name: tag
+      
+  - kind: Petition
+    properties:
+      - name: signatories
+      - name: titre

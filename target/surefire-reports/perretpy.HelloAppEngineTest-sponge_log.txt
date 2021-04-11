@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: perretpy.HelloAppEngineTest
 -------------------------------------------------------------------------------
-<<<<<<< Updated upstream
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s - in perretpy.HelloAppEngineTest
-=======
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.204 s - in perretpy.HelloAppEngineTest
->>>>>>> Stashed changes

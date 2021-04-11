@@ -8,29 +8,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@SuppressWarnings(&quot;serial&quot;)
 @WebServlet(
     name = &quot;HelloAppEngine&quot;,
     urlPatterns = {&quot;/hello&quot;}
 )
-<span class="fc" id="L16">public class HelloAppEngine extends HttpServlet {</span>
-<span class="fc" id="L17">	int i=0;</span>
-<span class="fc" id="L18">	static int j=0;</span>
+<span class="fc" id="L15">public class HelloAppEngine extends HttpServlet {</span>
+<span class="fc" id="L16">	int i=0;</span>
+<span class="fc" id="L17">	static int j=0;</span>
 	
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
 
-<span class="fc" id="L24">    response.setContentType(&quot;text/plain&quot;);</span>
-<span class="fc" id="L25">    response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L23">    response.setContentType(&quot;text/plain&quot;);</span>
+<span class="fc" id="L24">    response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
 
-<span class="fc" id="L27">    response.getWriter().print(&quot;Hello App Engine!\r\n&quot;);</span>
-<span class="fc" id="L28">    response.getWriter().println(&quot;x:&quot;+this.hashCode());</span>
-<span class="fc" id="L29">    response.getWriter().println(&quot;ip:&quot;+Inet4Address.getLocalHost().getHostName());</span>
-<span class="fc" id="L30">    response.getWriter().println(&quot;y:&quot;+Thread.currentThread());</span>
-<span class="fc" id="L31">    response.getWriter().println(&quot;i:&quot;+i++);</span>
-<span class="fc" id="L32">    response.getWriter().println(&quot;j:&quot;+j++);</span>
+<span class="fc" id="L26">    response.getWriter().print(&quot;Hello App Engine!\r\n&quot;);</span>
+<span class="fc" id="L27">    response.getWriter().println(&quot;x:&quot;+this.hashCode());</span>
+<span class="fc" id="L28">    response.getWriter().println(&quot;ip:&quot;+Inet4Address.getLocalHost().getHostName());</span>
+<span class="fc" id="L29">    response.getWriter().println(&quot;y:&quot;+Thread.currentThread());</span>
+<span class="fc" id="L30">    response.getWriter().println(&quot;i:&quot;+i++);</span>
+<span class="fc" id="L31">    response.getWriter().println(&quot;j:&quot;+j++);</span>
 
-<span class="fc" id="L34">  }</span>
+<span class="fc" id="L33">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

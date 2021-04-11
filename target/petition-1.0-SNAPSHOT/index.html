@@ -1,31 +1,49 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-    <title>Pétition</title>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="872392969523-in5sir0l4md25uv570creil2d1th3ks7.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Hello App Engine</title>
   </head>
 
   <body>
     <h1>Petition</h1>
-
-	<ul>
-		<li><a href='/hello'>The servlet Hello world</a></li>
+    
+    <h2>Check if it works</h2>
+    <ul>
+		<li><a href='/hello'>The servlet Hello world</a>
 		
-		<li><h2>Setting up</h2>
-		<a href='/populate'>Populate tables</a></li>
+		<h2>Setting up</h2>
+		<li><a href='/populate'>Populate tables</a>
 		
-		<li><h2>Queries</h2>
-		<a href='/queries'>Launch queries</a></li>
+		<h2>Queries</h2>
+		<li><a href='/queries'>Launch queries</a></li>
 		
-<<<<<<< Updated upstream
 		<h2>API</h2>
-		<li><a href='/_ah/api/myApi/v1/users'>Users from api</a></li>
-=======
-		<li><h2>API (not work)</h2>
-		<a href='/_ah/api/myApi/v1/users'>Users from api</a></li>
->>>>>>> Stashed changes
+		<li><a href='/_ah/api/petitionEndpoint/v1/top100'>Petitions from api</a></li>
+		<li><a href='/_ah/api/petitionEndpoint/v1/top100?tag=Famille'>Petitions with tag Famille from api</a></li>
+		<li>You can access a specific petition using : /petition/{id}</li>
 	</ul>
 
+	<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      }
+    </script>
     
   </body>
 </html>

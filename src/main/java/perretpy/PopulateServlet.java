@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings("serial")
 @WebServlet(name = "PopulateServlet", urlPatterns = { "/populate" })
@@ -38,12 +43,35 @@ public class PopulateServlet extends HttpServlet {
 		Random r = new Random();
 		Random nbSignatoriesR = new Random();
 		ArrayList<String> allPetitions = new ArrayList<String>();
+		ArrayList<String> allUsers = new ArrayList<String>();
 		
-
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		
+		//Delete all the datastore
+		Query petitions = new Query("Petition");
+		PreparedQuery ppetitions = datastore.prepare(petitions);
+		List<Entity> resultPetitions = ppetitions.asList(FetchOptions.Builder.withDefaults());
+		for (Entity entity : resultPetitions) {
+			datastore.delete(entity.getKey());			
+		}
+		Query users = new Query("User");
+		PreparedQuery pusers = datastore.prepare(users);
+		List<Entity> resultUsers = pusers.asList(FetchOptions.Builder.withDefaults());
+		for (Entity entity : resultUsers) {
+			datastore.delete(entity.getKey());			
+		}
+		Query signatures = new Query("Signatures");
+		PreparedQuery psignatures = datastore.prepare(signatures);
+		List<Entity> resultSignatures = psignatures.asList(FetchOptions.Builder.withDefaults());
+		for (Entity entity : resultSignatures) {
+			datastore.delete(entity.getKey());			
+		}
+		
 		
 		//Create [nbPetitions] petitions
 		for (int j=0 ; j<nbPetitions ; j++) {
-			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
+			//Creation of a random petition creation date for entity key to facilitate sort petition by creation date 
 			LocalDate petitionCreation = randomDateBetween(startDate, endDate);
 			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();
 			//Force the petition number to be on two digits to facilitate sort by title
@@ -51,7 +79,7 @@ public class PopulateServlet extends HttpServlet {
 			if (j<10) { title += "0"; }; 
 			
 			
-			//Add key to tab for random signature
+			//Add key to tab for random signature and to add owner
 			String key = reverseDatePetitionCreation + "p" + j;
 			allPetitions.add(key);
 			
@@ -60,11 +88,10 @@ public class PopulateServlet extends HttpServlet {
 			Entity p = new Entity("Petition", key);
 			p.setProperty("title", title + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
-			p.setProperty("tag", tagList[r.nextInt(tagList.length + 1)]);
+			p.setProperty("tag", tagList[r.nextInt(tagList.length)]);
 			
 			
 			//Put petition into data store
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			datastore.put(p);
 			response.getWriter().print("<li> created petition:" + p.getKey() + "Signataire : " + p.getProperty("signatories") + "<br>");
 		}
@@ -77,15 +104,18 @@ public class PopulateServlet extends HttpServlet {
 			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();
 			
 			
+			//Add key to tab for random signature and to add owner
+			String key = reverseDateUserCreation + "u" + i;
+			allUsers.add(key);
+			
 			//User creation
-			Entity u = new Entity("User", reverseDateUserCreation + "u" + i);
+			Entity u = new Entity("User", key);
 			u.setProperty("firstName", "first" + i);
 			u.setProperty("lastName", "last" + i);
 			u.setProperty("mail", "first" + i + ".last" + i + "@exemple.com");
 		    
 			
 			//Put user into data store
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			datastore.put(u);
 			response.getWriter().print("<li> created user:" + u.getKey() + "<br>");
 			
@@ -101,6 +131,22 @@ public class PopulateServlet extends HttpServlet {
 			
 			//Put signature bloc into data store
 			datastore.put(signatureBloc);
+		}
+		
+		
+		//Add owner to all petitions
+		for (int i=0 ; i<allPetitions.size(); i++) {
+			Entity petition = new Entity("Petition", allPetitions.get(i));
+			String owner = allUsers.get(r.nextInt(allUsers.size()));
+			
+			try {
+				Entity petitionDS = datastore.get(petition.getKey());
+				petitionDS.setProperty("owner", owner);
+				datastore.put(petitionDS);
+			} catch (EntityNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

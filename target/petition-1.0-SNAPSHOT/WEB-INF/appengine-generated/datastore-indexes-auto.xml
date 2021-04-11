@@ -1,21 +1,4 @@
-<<<<<<< Updated upstream
-<!-- Indices written at Fri, 5 Mar 2021 18:32:04 CET -->
-=======
-<!-- Indices written at Tue, 9 Mar 2021 17:01:40 CET -->
->>>>>>> Stashed changes
+<!-- Indices written at Sun, 11 Apr 2021 17:58:54 CEST -->
 
-<datastore-indexes autoGenerate="true">
+<datastore-indexes autoGenerate="true"/>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Petition" ancestor="false" source="auto">
-        <property name="titre" direction="asc"/>
-        <property name="tag" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Petition" ancestor="false" source="auto">
-        <property name="signatories" direction="asc"/>
-        <property name="titre" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PopulateServlet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">petition</a> &gt; <a href="index.source.html" class="el_package">perretpy</a> &gt; <span class="el_source">PopulateServlet.java</span></div><h1>PopulateServlet.java</h1><pre class="source lang-java linenums">package perretpy;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,84 +15,155 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings(&quot;serial&quot;)
 @WebServlet(name = &quot;PopulateServlet&quot;, urlPatterns = { &quot;/populate&quot; })
-<span class="nc" id="L19">public class PopulateServlet extends HttpServlet {</span>
+<span class="nc" id="L26">public class PopulateServlet extends HttpServlet {</span>
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-<span class="nc" id="L24">		int nbUsers = 100;</span>
-<span class="nc" id="L25">		int nbPetitions = 50;</span>
+<span class="nc" id="L31">		int nbUsers = 100;</span>
+<span class="nc" id="L32">		int nbPetitions = 50;</span>
+<span class="nc" id="L33">		LocalDate startDate = LocalDate.of(2010, 1, 1); //start date for date of user creation</span>
+<span class="nc" id="L34">		LocalDate endDate = LocalDate.now(); //end date for date of user creation</span>
 
-<span class="nc" id="L27">		response.setContentType(&quot;text/html&quot;);</span>
-<span class="nc" id="L28">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L36">		response.setContentType(&quot;text/html&quot;);</span>
+<span class="nc" id="L37">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
 		
 		//tag from change.org web site
-<<<<<<< Updated upstream
-<span class="nc" id="L42">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
-<span class="nc" id="L43">				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};</span>
-=======
-<span class="nc" id="L31">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
-<span class="nc" id="L32">				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};</span>
->>>>>>> Stashed changes
+<span class="nc" id="L40">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
+<span class="nc" id="L41">				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};</span>
 
-<span class="nc" id="L34">		Random r = new Random();</span>
-<span class="nc" id="L35">		Random nbSignatoriesR = new Random();</span>
-		int nbSignatories;
+<span class="nc" id="L43">		Random r = new Random();</span>
+<span class="nc" id="L44">		Random nbSignatoriesR = new Random();</span>
+<span class="nc" id="L45">		ArrayList&lt;String&gt; allPetitions = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L46">		ArrayList&lt;String&gt; allUsers = new ArrayList&lt;String&gt;();</span>
+		
+<span class="nc" id="L48">		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
 		
 		
-		//Create 1000 user
-<span class="nc bnc" id="L40" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
-<span class="nc" id="L41">			Entity u = new Entity(&quot;User&quot;, &quot;u&quot; + i);</span>
-<span class="nc" id="L42">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
-<span class="nc" id="L43">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
-			
-<span class="nc" id="L45">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
-<span class="nc" id="L46">			datastore.put(u);</span>
-
-<span class="nc" id="L48">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
+		//Delete all the datastore
+<span class="nc" id="L52">		Query petitions = new Query(&quot;Petition&quot;);</span>
+<span class="nc" id="L53">		PreparedQuery ppetitions = datastore.prepare(petitions);</span>
+<span class="nc" id="L54">		List&lt;Entity&gt; resultPetitions = ppetitions.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		for (Entity entity : resultPetitions) {</span>
+<span class="nc" id="L56">			datastore.delete(entity.getKey());			</span>
 		}
-		
+<span class="nc" id="L58">		Query users = new Query(&quot;User&quot;);</span>
+<span class="nc" id="L59">		PreparedQuery pusers = datastore.prepare(users);</span>
+<span class="nc" id="L60">		List&lt;Entity&gt; resultUsers = pusers.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		for (Entity entity : resultUsers) {</span>
+<span class="nc" id="L62">			datastore.delete(entity.getKey());			</span>
+		}
+<span class="nc" id="L64">		Query signatures = new Query(&quot;Signatures&quot;);</span>
+<span class="nc" id="L65">		PreparedQuery psignatures = datastore.prepare(signatures);</span>
+<span class="nc" id="L66">		List&lt;Entity&gt; resultSignatures = psignatures.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (Entity entity : resultSignatures) {</span>
+<span class="nc" id="L68">			datastore.delete(entity.getKey());			</span>
+		}
 		
 		
 		//Create [nbPetitions] petitions
-<span class="nc bnc" id="L54" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
-<span class="nc" id="L55">			Entity p = new Entity(&quot;Petition&quot;, &quot;p&quot; + j);</span>
-<span class="nc" id="L56">			String titre = &quot;titrePetition&quot;;</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">			if (j&lt;10) { titre += &quot;0&quot;; } //facilite le tri sur le titre</span>
-<span class="nc" id="L58">			p.setProperty(&quot;titre&quot;, titre + j);</span>
-<span class="nc" id="L59">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
-<span class="nc" id="L60">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(14)]);</span>
-			
-<span class="nc" id="L62">			nbSignatories = nbSignatoriesR.nextInt(19) + 1;</span>
-			
-<span class="nc" id="L64">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatories) {</span>
-<span class="nc" id="L66">				fset.add(&quot;u&quot; + r.nextInt(nbUsers));</span>
-			}
-<span class="nc" id="L68">			p.setProperty(&quot;signatories&quot;, fset);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
+			//Creation of a random petition creation date for entity key to facilitate sort petition by creation date 
+<span class="nc" id="L75">			LocalDate petitionCreation = randomDateBetween(startDate, endDate);</span>
+<span class="nc" id="L76">			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();</span>
+			//Force the petition number to be on two digits to facilitate sort by title
+<span class="nc" id="L78">			String title = &quot;titrePetition&quot;;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			if (j&lt;10) { title += &quot;0&quot;; }; </span>
 			
 			
+			//Add key to tab for random signature and to add owner
+<span class="nc" id="L83">			String key = reverseDatePetitionCreation + &quot;p&quot; + j;</span>
+<span class="nc" id="L84">			allPetitions.add(key);</span>
 			
-<span class="nc" id="L72">			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
-<span class="nc" id="L73">			datastore.put(p);</span>
-
-<span class="nc" id="L75">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
+			
+			//Petition creation
+<span class="nc" id="L88">			Entity p = new Entity(&quot;Petition&quot;, key);</span>
+<span class="nc" id="L89">			p.setProperty(&quot;title&quot;, title + j);</span>
+<span class="nc" id="L90">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
+<span class="nc" id="L91">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(tagList.length)]);</span>
+			
+			
+			//Put petition into data store
+<span class="nc" id="L95">			datastore.put(p);</span>
+<span class="nc" id="L96">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
 		}
 		
 		
+		//Create [nbUsers] user
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
+			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
+<span class="nc" id="L103">			LocalDate userCreation = randomDateBetween(startDate, endDate);</span>
+<span class="nc" id="L104">			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();</span>
+			
+			
+			//Add key to tab for random signature and to add owner
+<span class="nc" id="L108">			String key = reverseDateUserCreation + &quot;u&quot; + i;</span>
+<span class="nc" id="L109">			allUsers.add(key);</span>
+			
+			//User creation
+<span class="nc" id="L112">			Entity u = new Entity(&quot;User&quot;, key);</span>
+<span class="nc" id="L113">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
+<span class="nc" id="L114">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
+<span class="nc" id="L115">			u.setProperty(&quot;mail&quot;, &quot;first&quot; + i + &quot;.last&quot; + i + &quot;@exemple.com&quot;);</span>
+		    
+			
+			//Put user into data store
+<span class="nc" id="L119">			datastore.put(u);</span>
+<span class="nc" id="L120">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
+			
+			
+			//Signatures creation
+<span class="nc" id="L124">			Entity signatureBloc = new Entity(&quot;Signatures&quot;, u.getKey());</span>
+<span class="nc" id="L125">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(20)) {</span>
+<span class="nc" id="L127">				fset.add(allPetitions.get(r.nextInt(allPetitions.size())).toString());</span>
+			}
+<span class="nc" id="L129">			signatureBloc.setProperty(&quot;petitions&quot;, fset);</span>
+			
+			
+			//Put signature bloc into data store
+<span class="nc" id="L133">			datastore.put(signatureBloc);</span>
+		}
 		
 		
-		
-		
-		
-		
-		
-		
-<span class="nc" id="L87">	}</span>
+		//Add owner to all petitions
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		for (int i=0 ; i&lt;allPetitions.size(); i++) {</span>
+<span class="nc" id="L139">			Entity petition = new Entity(&quot;Petition&quot;, allPetitions.get(i));</span>
+<span class="nc" id="L140">			String owner = allUsers.get(r.nextInt(allUsers.size()));</span>
+			
+			try {
+<span class="nc" id="L143">				Entity petitionDS = datastore.get(petition.getKey());</span>
+<span class="nc" id="L144">				petitionDS.setProperty(&quot;owner&quot;, owner);</span>
+<span class="nc" id="L145">				datastore.put(petitionDS);</span>
+<span class="nc" id="L146">			} catch (EntityNotFoundException e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L148">				e.printStackTrace();</span>
+			}
+		}
+<span class="nc" id="L151">	}</span>
+	
+	
+	/**
+	* Return an random date between startDate and endDate 
+	*
+	* @param  startDate	LocalDate 
+	* @param  endDate	LocalDate
+	* @return LocalDate between startDate and endDate
+	*/
+	public LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate){
+<span class="nc" id="L162">		long start = startDate.toEpochDay();</span>
+<span class="nc" id="L163">		long end = endDate.toEpochDay();</span>
+<span class="nc" id="L164">		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();</span>
+<span class="nc" id="L165">		return LocalDate.ofEpochDay(randomEpochDay);</span>
+	}
+	
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

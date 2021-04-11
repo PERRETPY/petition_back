@@ -1,10 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-petition,perretpy,HelloAppEngine,0,82,0,0,0,12,0,3,0,3
-petition,perretpy,PopulateServlet,261,0,8,0,32,0,6,0,2,0
-<<<<<<< Updated upstream
-petition,perretpy,Queries,367,0,8,0,53,0,6,0,2,0
-petition,perretpy,petitionsAPI,26,0,0,0,7,0,2,0,2,0
-=======
-petition,perretpy,PetitionEndpoint,67,0,0,0,16,0,4,0,4,0
-petition,perretpy,Queries,367,0,8,0,53,0,6,0,2,0
->>>>>>> Stashed changes
+petition,models,petition,3,0,0,0,1,0,1,0,1,0
+petition,perretpy,HelloAppEngine,0,87,0,0,0,12,0,3,0,3
+petition,perretpy,UsersServlet,56,0,2,0,19,0,3,0,2,0
+petition,perretpy,PopulateServlet,498,0,16,0,72,0,11,0,3,0
+petition,perretpy,PetitionEndpoint,98,0,4,0,24,0,6,0,4,0
+petition,perretpy,Queries,379,0,8,0,50,0,6,0,2,0
