@@ -40,6 +40,12 @@ public class Queries extends HttpServlet {
 
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
+		
+		if (request.getUserPrincipal() != null) {
+			response.getWriter().print(request.getUserPrincipal().getName());
+		}
+		
+		
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		

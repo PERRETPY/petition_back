@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <h1>Petition</h1>
+    <h1>Petition v.2</h1>
     
     <h2>Check if it works</h2>
     <ul>
@@ -21,29 +21,13 @@
 		<h2>Queries</h2>
 		<li><a href='/queries'>Launch queries</a></li>
 		
+		<h2>Connection</h2>
+		<li><a href='/userapi'>Connection with Google</a></li>
+		
 		<h2>API</h2>
 		<li><a href='/_ah/api/petitionEndpoint/v1/top100'>Petitions from api</a></li>
 		<li><a href='/_ah/api/petitionEndpoint/v1/top100?tag=Famille'>Petitions with tag Famille from api</a></li>
 		<li>You can access a specific petition using : /petition/{id}</li>
 	</ul>
-
-	<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    <script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-      }
-    </script>
-    
   </body>
 </html>
