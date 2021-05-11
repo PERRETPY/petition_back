@@ -8,3 +8,9 @@ indexes:
     properties:
       - name: signatories
       - name: titre
+  
+  - kind: Signature
+    properties:
+      - name: petitions
+        direction: asc
+     

@@ -2,6 +2,6 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 petition,models,petition,3,0,0,0,1,0,1,0,1,0
 petition,perretpy,HelloAppEngine,0,87,0,0,0,12,0,3,0,3
 petition,perretpy,UsersServlet,56,0,2,0,19,0,3,0,2,0
-petition,perretpy,PopulateServlet,504,0,16,0,75,0,11,0,3,0
-petition,perretpy,PetitionEndpoint,100,0,4,0,25,0,6,0,4,0
-petition,perretpy,Queries,454,0,12,0,69,0,8,0,2,0
+petition,perretpy,PopulateServlet,526,0,16,0,80,0,11,0,3,0
+petition,perretpy,PetitionEndpoint,81,0,4,0,20,0,6,0,4,0
+petition,perretpy,Queries,441,0,12,0,63,0,8,0,2,0

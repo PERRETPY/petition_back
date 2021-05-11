@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="petition:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>petition</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="petition-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="petition:war exploded" />
+    </root>
+  </artifact>
+</component>

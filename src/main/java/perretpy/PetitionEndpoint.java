@@ -63,25 +63,16 @@ public class PetitionEndpoint {
 	}
 	
 	
-	@ApiMethod(path = "auth", name = "auth", httpMethod = HttpMethod.GET)
-	public List<Entity> auth(User user) throws UnauthorizedException {
+	@ApiMethod(path = "petitionSigned", name = "auth", httpMethod = HttpMethod.GET)
+	public Object auth(User user) throws UnauthorizedException {
 
 		if (user == null) {
 			throw new UnauthorizedException("Invalid credentials");
 		}
 		
-		Query q = new Query("Petition");
-		System.out.println("QUERY = "+q.toString());
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
+		
+		
+		Object result="Hello from auth path, you are connect with : "+ user.getEmail();
 		return result;
-	}
-	
-	
-	
-	
-	
-	
-	
+	}		
 }

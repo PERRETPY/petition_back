@@ -38,7 +38,7 @@ import com.google.appengine.api.datastore.Query;
 		
 		//tag from change.org web site
 <span class="nc" id="L40">		String [] tagList = {&quot;Animaux&quot;, &quot;Environnement&quot;, &quot;Justice économique&quot;, &quot;Politique&quot;, &quot;Santé&quot;, &quot;Près de vous&quot;, &quot;Droits des femmes&quot;,</span>
-				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};
+<span class="nc" id="L41">				&quot;Droits des migrants&quot;, &quot;Justice pénale&quot;, &quot;Education&quot;, &quot;Handicap&quot;, &quot;Droits humains&quot;, &quot;Famille&quot;, &quot;Patrimoine&quot;, &quot;Autre&quot;};</span>
 
 <span class="nc" id="L43">		Random r = new Random();</span>
 <span class="nc" id="L44">		Random nbSignatoriesR = new Random();</span>
@@ -54,19 +54,19 @@ import com.google.appengine.api.datastore.Query;
 <span class="nc" id="L54">		List&lt;Entity&gt; resultPetitions = ppetitions.asList(FetchOptions.Builder.withDefaults());</span>
 <span class="nc bnc" id="L55" title="All 2 branches missed.">		for (Entity entity : resultPetitions) {</span>
 <span class="nc" id="L56">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L57">		}</span>
+		}
 <span class="nc" id="L58">		Query users = new Query(&quot;User&quot;);</span>
 <span class="nc" id="L59">		PreparedQuery pusers = datastore.prepare(users);</span>
 <span class="nc" id="L60">		List&lt;Entity&gt; resultUsers = pusers.asList(FetchOptions.Builder.withDefaults());</span>
 <span class="nc bnc" id="L61" title="All 2 branches missed.">		for (Entity entity : resultUsers) {</span>
 <span class="nc" id="L62">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L63">		}</span>
+		}
 <span class="nc" id="L64">		Query signatures = new Query(&quot;Signatures&quot;);</span>
 <span class="nc" id="L65">		PreparedQuery psignatures = datastore.prepare(signatures);</span>
 <span class="nc" id="L66">		List&lt;Entity&gt; resultSignatures = psignatures.asList(FetchOptions.Builder.withDefaults());</span>
 <span class="nc bnc" id="L67" title="All 2 branches missed.">		for (Entity entity : resultSignatures) {</span>
 <span class="nc" id="L68">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L69">		}</span>
+		}
 		
 		
 		//Create [nbPetitions] petitions
@@ -89,30 +89,30 @@ import com.google.appengine.api.datastore.Query;
 <span class="nc" id="L89">			p.setProperty(&quot;title&quot;, title + j);</span>
 <span class="nc" id="L90">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
 <span class="nc" id="L91">			p.setProperty(&quot;tag&quot;, tagList[r.nextInt(tagList.length)]);</span>
+<span class="nc" id="L92">			p.setProperty(&quot;nbSignature&quot;, (long)0);</span>
 			
 			
 			//Put petition into data store
-<span class="nc" id="L95">			datastore.put(p);</span>
-<span class="nc" id="L96">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L96">			datastore.put(p);</span>
+<span class="nc" id="L97">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
 		}
 		
 		
 		//Create [nbUsers] user
-<span class="nc bnc" id="L101" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
 			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
-<span class="nc" id="L103">			LocalDate userCreation = randomDateBetween(startDate, endDate);</span>
-<span class="nc" id="L104">			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();</span>
+<span class="nc" id="L104">			LocalDate userCreation = randomDateBetween(startDate, endDate);</span>
+<span class="nc" id="L105">			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();</span>
 			
 			
 			//Add key to tab for random signature and to add owner
-<span class="nc" id="L108">			String key = reverseDateUserCreation + &quot;u&quot; + i;</span>
-<span class="nc" id="L109">			allUsers.add(key);</span>
+<span class="nc" id="L109">			String key = &quot;first&quot; + i + &quot;.last&quot; + i + &quot;@exemple.com&quot;;</span>
+<span class="nc" id="L110">			allUsers.add(key);</span>
 			
 			//User creation
-<span class="nc" id="L112">			Entity u = new Entity(&quot;User&quot;, key);</span>
-<span class="nc" id="L113">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
-<span class="nc" id="L114">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
-<span class="nc" id="L115">			u.setProperty(&quot;mail&quot;, &quot;first&quot; + i + &quot;.last&quot; + i + &quot;@exemple.com&quot;);</span>
+<span class="nc" id="L113">			Entity u = new Entity(&quot;User&quot;, key);</span>
+<span class="nc" id="L114">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
+<span class="nc" id="L115">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
 		    
 			
 			//Put user into data store
@@ -124,31 +124,43 @@ import com.google.appengine.api.datastore.Query;
 <span class="nc" id="L124">			Entity signatureBloc = new Entity(&quot;Signatures&quot;, u.getKey());</span>
 <span class="nc" id="L125">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
 <span class="nc bnc" id="L126" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(20)) {</span>
-<span class="nc" id="L127">				fset.add(allPetitions.get(r.nextInt(allPetitions.size())).toString());</span>
+<span class="nc" id="L127">				String petitionKey = allPetitions.get(r.nextInt(allPetitions.size())).toString();</span>
+<span class="nc" id="L128">				fset.add(petitionKey);</span>
+				
+<span class="nc" id="L130">				Entity e=new Entity(&quot;Petition&quot;, petitionKey);</span>
+				try {
+<span class="nc" id="L132">					Entity e1=datastore.get(e.getKey());</span>
+<span class="nc" id="L133">					Long nbSignature = (Long) e1.getProperty(&quot;nbSignatures&quot;);</span>
+<span class="nc" id="L134">					e1.setProperty(&quot;nbSignatures&quot;, nbSignature++);</span>
+<span class="nc" id="L135">					datastore.put(e1);</span>
+<span class="nc" id="L136">				} catch (EntityNotFoundException e1) {</span>
+					// TODO Auto-generated catch block
+<span class="nc" id="L138">					e1.printStackTrace();</span>
+				}	
 			}
-<span class="nc" id="L129">			signatureBloc.setProperty(&quot;petitions&quot;, fset);</span>
+<span class="nc" id="L141">			signatureBloc.setProperty(&quot;petitions&quot;, fset);</span>
 			
 			
 			//Put signature bloc into data store
-<span class="nc" id="L133">			datastore.put(signatureBloc);</span>
+<span class="nc" id="L145">			datastore.put(signatureBloc);</span>
 		}
 		
 		
 		//Add owner to all petitions
-<span class="nc bnc" id="L138" title="All 2 branches missed.">		for (int i=0 ; i&lt;allPetitions.size(); i++) {</span>
-<span class="nc" id="L139">			Entity petition = new Entity(&quot;Petition&quot;, allPetitions.get(i));</span>
-<span class="nc" id="L140">			String owner = allUsers.get(r.nextInt(allUsers.size()));</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		for (int i=0 ; i&lt;allPetitions.size(); i++) {</span>
+<span class="nc" id="L151">			Entity petition = new Entity(&quot;Petition&quot;, allPetitions.get(i));</span>
+<span class="nc" id="L152">			String owner = allUsers.get(r.nextInt(allUsers.size()));</span>
 			
 			try {
-<span class="nc" id="L143">				Entity petitionDS = datastore.get(petition.getKey());</span>
-<span class="nc" id="L144">				petitionDS.setProperty(&quot;owner&quot;, owner);</span>
-<span class="nc" id="L145">				datastore.put(petitionDS);</span>
-<span class="nc" id="L146">			} catch (EntityNotFoundException e) {</span>
+<span class="nc" id="L155">				Entity petitionDS = datastore.get(petition.getKey());</span>
+<span class="nc" id="L156">				petitionDS.setProperty(&quot;owner&quot;, owner);</span>
+<span class="nc" id="L157">				datastore.put(petitionDS);</span>
+<span class="nc" id="L158">			} catch (EntityNotFoundException e) {</span>
 				// TODO Auto-generated catch block
-<span class="nc" id="L148">				e.printStackTrace();</span>
-<span class="nc" id="L149">			}</span>
+<span class="nc" id="L160">				e.printStackTrace();</span>
+			}
 		}
-<span class="nc" id="L151">	}</span>
+<span class="nc" id="L163">	}</span>
 	
 	
 	/**
@@ -159,10 +171,10 @@ import com.google.appengine.api.datastore.Query;
 	* @return LocalDate between startDate and endDate
 	*/
 	public LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate){
-<span class="nc" id="L162">		long start = startDate.toEpochDay();</span>
-<span class="nc" id="L163">		long end = endDate.toEpochDay();</span>
-<span class="nc" id="L164">		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();</span>
-<span class="nc" id="L165">		return LocalDate.ofEpochDay(randomEpochDay);</span>
+<span class="nc" id="L174">		long start = startDate.toEpochDay();</span>
+<span class="nc" id="L175">		long end = endDate.toEpochDay();</span>
+<span class="nc" id="L176">		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();</span>
+<span class="nc" id="L177">		return LocalDate.ofEpochDay(randomEpochDay);</span>
 	}
 	
 }

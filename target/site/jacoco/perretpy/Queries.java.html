@@ -68,7 +68,7 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L68">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + result.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L69" title="All 2 branches missed.">		for (Entity entity : result) {</span>
 <span class="nc" id="L70">		    response.getWriter().print(entity.getProperty(&quot;firstName&quot;)+&quot;&lt;br&gt;&quot;);</span>
-<span class="nc" id="L71">		}</span>
+		}
 		
 		
 	//Q3 : All petitions with title and tag projection
@@ -87,7 +87,7 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L87">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpet.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L88" title="All 2 branches missed.">		for (Entity entity : resultpet) {</span>
 <span class="nc" id="L89">		    response.getWriter().print(entity.getProperty(&quot;title&quot;)+&quot;&lt;br&gt;&quot;);</span>
-<span class="nc" id="L90">		}</span>
+		}
 <span class="nc" id="L91">		long t3=System.currentTimeMillis();</span>
 		
 		
@@ -109,7 +109,7 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L109">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpetTag.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L110" title="All 2 branches missed.">		for (Entity entity : resultpetTag) {</span>
 <span class="nc" id="L111">			response.getWriter().print(entity.getProperty(&quot;title&quot;)+&quot; : &quot;+entity.getProperty(&quot;tag&quot;)+&quot;&lt;br&gt;&quot;);</span>
-<span class="nc" id="L112">		}</span>
+		}
 <span class="nc" id="L113">		long t4=System.currentTimeMillis();</span>
 	
 	//Q5 : Petitions signed by User0
@@ -144,12 +144,12 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L144">				} catch (EntityNotFoundException EntityNotFound) {</span>
 					// TODO Auto-generated catch block
 <span class="nc" id="L146">					EntityNotFound.printStackTrace();</span>
-<span class="nc" id="L147">				}</span>
+				}
 				
 <span class="nc" id="L149">				System.out.println(petitionSigned.toString());</span>
 				
-<span class="nc" id="L151">			}</span>
-<span class="nc" id="L152">		}</span>
+			}
+		}
 <span class="nc" id="L153">		long t5bis=System.currentTimeMillis();</span>
 		
 	//Print timing 

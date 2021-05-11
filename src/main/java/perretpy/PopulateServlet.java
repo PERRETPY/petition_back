@@ -89,6 +89,7 @@ public class PopulateServlet extends HttpServlet {
 			p.setProperty("title", title + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
 			p.setProperty("tag", tagList[r.nextInt(tagList.length)]);
+			p.setProperty("nbSignature", (long)0);
 			
 			
 			//Put petition into data store
@@ -105,14 +106,13 @@ public class PopulateServlet extends HttpServlet {
 			
 			
 			//Add key to tab for random signature and to add owner
-			String key = reverseDateUserCreation + "u" + i;
+			String key = "first" + i + ".last" + i + "@exemple.com";
 			allUsers.add(key);
 			
 			//User creation
 			Entity u = new Entity("User", key);
 			u.setProperty("firstName", "first" + i);
 			u.setProperty("lastName", "last" + i);
-			u.setProperty("mail", "first" + i + ".last" + i + "@exemple.com");
 		    
 			
 			//Put user into data store
@@ -124,7 +124,19 @@ public class PopulateServlet extends HttpServlet {
 			Entity signatureBloc = new Entity("Signatures", u.getKey());
 			HashSet<String> fset = new HashSet<String>();
 			while (fset.size() < nbSignatoriesR.nextInt(20)) {
-				fset.add(allPetitions.get(r.nextInt(allPetitions.size())).toString());
+				String petitionKey = allPetitions.get(r.nextInt(allPetitions.size())).toString();
+				fset.add(petitionKey);
+				
+				Entity e=new Entity("Petition", petitionKey);
+				try {
+					Entity e1=datastore.get(e.getKey());
+					Long nbSignature = (Long) e1.getProperty("nbSignatures");
+					e1.setProperty("nbSignatures", nbSignature++);
+					datastore.put(e1);
+				} catch (EntityNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
 			}
 			signatureBloc.setProperty("petitions", fset);
 			
