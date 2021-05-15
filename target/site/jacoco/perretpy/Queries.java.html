@@ -86,7 +86,7 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 
 <span class="nc" id="L87">		response.getWriter().print(&quot;&lt;li&gt; result:&quot; + resultpet.size() + &quot;&lt;br&gt;&quot;);</span>
 <span class="nc bnc" id="L88" title="All 2 branches missed.">		for (Entity entity : resultpet) {</span>
-<span class="nc" id="L89">		    response.getWriter().print(entity.getProperty(&quot;title&quot;)+&quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L89">		    response.getWriter().print(entity.getProperty(&quot;title&quot;)+ &quot; | &quot; + entity.getProperty(&quot;name&quot;) +&quot;&lt;br&gt;&quot;);</span>
 		}
 <span class="nc" id="L91">		long t3=System.currentTimeMillis();</span>
 		

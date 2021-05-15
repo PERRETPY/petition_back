@@ -130,7 +130,7 @@ public class PopulateServlet extends HttpServlet {
 				Entity e=new Entity("Petition", petitionKey);
 				try {
 					Entity e1=datastore.get(e.getKey());
-					Long nbSignature = (Long) e1.getProperty("nbSignatures");
+					Long nbSignature = (Long) e1.getProperty("nbSignature");
 					e1.setProperty("nbSignatures", nbSignature++);
 					datastore.put(e1);
 				} catch (EntityNotFoundException e1) {

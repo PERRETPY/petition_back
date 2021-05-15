@@ -130,7 +130,7 @@ import com.google.appengine.api.datastore.Query;
 <span class="nc" id="L130">				Entity e=new Entity(&quot;Petition&quot;, petitionKey);</span>
 				try {
 <span class="nc" id="L132">					Entity e1=datastore.get(e.getKey());</span>
-<span class="nc" id="L133">					Long nbSignature = (Long) e1.getProperty(&quot;nbSignatures&quot;);</span>
+<span class="nc" id="L133">					Long nbSignature = (Long) e1.getProperty(&quot;nbSignature&quot;);</span>
 <span class="nc" id="L134">					e1.setProperty(&quot;nbSignatures&quot;, nbSignature++);</span>
 <span class="nc" id="L135">					datastore.put(e1);</span>
 <span class="nc" id="L136">				} catch (EntityNotFoundException e1) {</span>
