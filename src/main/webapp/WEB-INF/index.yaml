@@ -3,6 +3,11 @@ indexes:
     properties:
       - name: titre
       - name: tag
+
+  - kind: Petition
+    properties:
+      - name: nbSignature
+        direction: desc
       
   - kind: Petition
     properties:
