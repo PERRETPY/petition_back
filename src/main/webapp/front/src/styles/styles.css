@@ -1,0 +1,50 @@
+* {
+  magin: 0;
+  padding: 0;
+}
+
+body {
+  padding-top: 5em;
+  background-image: url("/../../assets/world-background opacity.png");
+  background-position: 50% 0%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+* {
+  font-family: Avenir;
+}
+
+.home h2 {
+  font-size: 46px;
+  color: #1FB9D4;
+}
+.home h5 {
+  font-size: 18px;
+  color: #1FB9D4;
+}
+
+nav {
+  box-shadow: 0px 0px 10px black;
+}
+
+.home {
+  padding-top: 5em;
+  margin-bottom: 5em;
+  justify-content: center;
+  text-align: center;
+}
+
+.container {
+  display: inline-block;
+  width: 70%;
+  text-align: left;
+  margin: 5em;
+}
+
+.list-petition-items {
+  width: 100%;
+  margin: 5em;
+}
+
+/*# sourceMappingURL=styles.css.map */

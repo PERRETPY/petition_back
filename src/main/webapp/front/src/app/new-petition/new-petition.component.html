@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Nouvelle pétition</h2>
+
+  <form [formGroup]="petitionForm" (ngSubmit)="onSubmitForm()">
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" class="form-control" id="title" formControlName="title">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" formControlName="description" id="description" cols="30" rows="10"></textarea>
+    </div>
+    <span [ngStyle]="petitionForm.controls['description'].value.length  > maxLengthDescription && {'color': 'red'} || {'color': 'green'}" >
+    {{petitionForm.controls['description'].value.length}} / {{ maxLengthDescription }} max
+  </span>
+
+
+    <div formArrayName="tags">
+      <h3>Tags</h3>
+      <div class="form-group" *ngFor="let tagControl of getTags().controls; let i = index">
+
+        <select id="tags" class="form-control" [formControlName]="i" multiple>
+          <option *ngFor="let tag of tags" [ngValue]="tag">
+            {{ tag }}
+          </option>
+        </select>
+
+        <button type="button" class="btn btn-danger" (click)="onDeleteTag(i)">Supprimer un tag</button>
+      </div>
+      <button *ngIf="moreTags" type="button" class="btn btn-success" (click)="onAddTag()">Ajouter un tag</button>
+    </div>
+
+
+    <select class="form-select" aria-label="Default select example" multiple aria-label="multiple select example">
+
+
+      <option *ngFor="let tag of tags" [ngValue]="tag">
+        {{ tag }}
+      </option>
+    </select>
+
+
+
+
+    <button class="btn btn-primary" type="submit" [disabled]="petitionForm.invalid">Soumettre le formulaire</button>
+  </form>
+
+</div>

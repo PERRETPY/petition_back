@@ -1,0 +1,14 @@
+<div class="container">
+  <h3>À la une</h3>
+  <div
+    class="search-results"
+    infiniteScroll
+    [infiniteScrollDistance]="0.5"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()"
+  >
+  <div *ngFor="let petition of top100Petition">
+    <app-preview-petition [petition]="petition" class="list-petition-items"></app-preview-petition>
+  </div>
+  </div>
+</div>
