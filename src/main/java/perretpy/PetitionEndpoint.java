@@ -72,23 +72,22 @@ public class PetitionEndpoint {
 		return resultEntity;
 	}
 	
-	
-	@ApiMethod(path = "petitionSigned", name = "auth", httpMethod = HttpMethod.GET)
-	public List<Entity> auth(User user) throws UnauthorizedException {
 
-		if (user == null) {
+	//Return petition signed by user
+	@ApiMethod(path = "petitionSigned", name = "auth", httpMethod = HttpMethod.GET)
+	public List<Entity> petitionSigned(User user) throws UnauthorizedException {
+
+		/*if (user == null) {
 			throw new UnauthorizedException("Invalid credentials");
-		}
+		}*/
+
 		String key = "first41.last41@exemple.com";
-		Entity searchEntityUser=new Entity("Petition",key);
+		Key userKey = KeyFactory.createKey("User", key);
 		List<Entity> result = new ArrayList();
-		
-		// SELECT * FROM Signatures WHERE __key__ HAS ANCESTOR Key(User, '01-20-1102u41')
-		
+
 		Query signatures = new Query("Signatures");
-		signatures.setAncestor(searchEntityUser.getKey());
-		System.out.println("Q5 bis : " + signatures.toString());
-		
+		signatures.setAncestor(userKey);
+
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery psignatures = datastore.prepare(signatures);
 		
@@ -116,62 +115,90 @@ public class PetitionEndpoint {
 				
 			}
 		}
-		return petitionSignedList;
+		return result;
 	}
-	
-	@ApiMethod(path="signedPetition", name="signedPetition", httpMethod=HttpMethod.GET)
-	public Entity signedPetition(User user) throws UnauthorizedException {
 
-		if (user  == null) {
+
+	//Return list of petitions key signed by user
+	@ApiMethod(path="signedPetition", name="signedPetition", httpMethod=HttpMethod.GET)
+	public List signedPetition(User user) throws UnauthorizedException {
+
+		/*if (user == null) {
 			throw new UnauthorizedException("Invalid credentials");
-		}
-		
+		}*/
+
+		String key = "first22.last22@exemple.com";
+		Key userKey = KeyFactory.createKey("User", key);
+		List<Entity> result = new ArrayList();
+
+		Query signatures = new Query("Signatures");
+		signatures.setAncestor(userKey);
+
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		
-		Entity searchEntity = new Entity("Signature", user.getEmail());
-		Entity resultEntity = null;
-		try {
-			resultEntity = datastore.get(searchEntity.getKey());
-		} catch (EntityNotFoundException EntityNotFound) {
-			// TODO Auto-generated catch block
-			EntityNotFound.printStackTrace();
+		PreparedQuery psignatures = datastore.prepare(signatures);
+
+		List<Entity> resultsignatures = psignatures.asList(FetchOptions.Builder.withDefaults());
+
+		List petitionsKey = new ArrayList<>();
+
+		for (Entity entity : resultsignatures){
+			petitionsKey.add(entity.getProperty("petitions").toString());
 		}
 		
-		return resultEntity;
+		return petitionsKey;
 	}
 	
 	
 	@ApiMethod(path="signPetition/{petitionId}", name="signPetition", httpMethod=HttpMethod.PUT)
-	public Entity signPetition(@Named("petitionId") String petitionId, User user) throws UnauthorizedException, EntityNotFoundException, ConcurrentModificationException {
+	public void signPetition(@Named("petitionId") String petitionId, User user) throws UnauthorizedException, EntityNotFoundException, ConcurrentModificationException {
 		
 		System.out.println("petition ID : " + petitionId);
 		
 		if (user  == null) {
 			throw new UnauthorizedException("Invalid credentials");
-		}	
-		
-		int retries = 3;
+		}
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		TransactionOptions options = TransactionOptions.Builder.withXG(true);
+		Transaction txn = datastore.beginTransaction(options);
+
+		int retries = 3;
 		Entity resultPetition = null;
 		Key petitionKey = KeyFactory.createKey("Petition", petitionId);
-		Entity signedPetition = signedPetition(user);
-		
+
 		while (true) {
-			TransactionOptions options = TransactionOptions.Builder.withXG(true);
-			Transaction txn = datastore.beginTransaction(options);
-			
+
 			try {
+				//Add 1 to nbSignature in petition entity
 				resultPetition = datastore.get(petitionKey);
 				long nbSignatures = (long) resultPetition.getProperty("nbSignature");
-				++nbSignatures;
-				resultPetition.setProperty("nbSignatures", nbSignatures);
+				nbSignatures += 1;
+				resultPetition.setProperty("nbSignature", nbSignatures);
 				datastore.put(txn, resultPetition);
-				
-				
-				HashSet<String> petitions = (HashSet<String>) signedPetition.getProperty("petitions");
-				petitions.add(petitionId);
-				signedPetition.setProperty("petitions", petitions);
-				datastore.put(txn, signedPetition);
+
+				//Add petition key to Signatures of the user
+
+
+
+				List petitionList = signedPetition(user);
+
+				petitionList.add(petitionId);
+
+
+
+
+				Key userKey = KeyFactory.createKey("User", "first22.last22@exemple.com");
+
+				Query signatures = new Query("Signatures");
+				signatures.setAncestor(userKey);
+
+				PreparedQuery psignatures = datastore.prepare(signatures);
+
+				List<Entity> resultsignatures = psignatures.asList(FetchOptions.Builder.withDefaults());
+
+				resultsignatures.get(0).setProperty("petitions", petitionList);
+
+				datastore.put(txn, resultsignatures.get(0));
 				
 	
 				txn.commit();
@@ -196,7 +223,7 @@ public class PetitionEndpoint {
 			}
 			
 		}
-		return signedPetition;
+		//return signedPetition;
 	}
 
 	@ApiMethod(path="signatory/{petitionId}", name="getSignatory", httpMethod = HttpMethod.GET)
