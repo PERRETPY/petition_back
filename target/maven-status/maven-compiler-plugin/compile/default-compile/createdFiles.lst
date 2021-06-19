@@ -1,6 +1,6 @@
+models/petition.class
 perretpy/Queries.class
 perretpy/HelloAppEngine.class
-models/petition.class
 perretpy/PopulateServlet.class
 perretpy/UsersServlet.class
 perretpy/PetitionEndpoint.class

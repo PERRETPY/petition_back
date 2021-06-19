@@ -14,21 +14,9 @@ import com.google.api.server.spi.config.Nullable;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.UnauthorizedException;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.QueryResultList;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Transaction;
-import com.google.appengine.api.datastore.TransactionOptions;
 
 @Api(name = "petitionEndpoint",
 	version = "v1",
@@ -49,9 +37,9 @@ public class PetitionEndpoint {
 		if (tag1 != null) {
 			q.setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, tag1));
 		}
-		
-		System.out.println("Voila le token que j'ai reçu : " + cursorString);
-		
+
+		q.addSort("nbSignature", Query.SortDirection.DESCENDING);
+
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
 		
@@ -165,7 +153,7 @@ public class PetitionEndpoint {
 		int retries = 3;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity resultPetition = null;
-		Key petitionKey = KeyFactory.createKey("MessageBoard", petitionId);
+		Key petitionKey = KeyFactory.createKey("Petition", petitionId);
 		Entity signedPetition = signedPetition(user);
 		
 		while (true) {
@@ -174,7 +162,7 @@ public class PetitionEndpoint {
 			
 			try {
 				resultPetition = datastore.get(petitionKey);
-				long nbSignatures = (long) resultPetition.getProperty("nbSignatures");
+				long nbSignatures = (long) resultPetition.getProperty("nbSignature");
 				++nbSignatures;
 				resultPetition.setProperty("nbSignatures", nbSignatures);
 				datastore.put(txn, resultPetition);
@@ -187,6 +175,7 @@ public class PetitionEndpoint {
 				
 	
 				txn.commit();
+				System.out.println("Petition " + petitionId + " signed by " + user.getEmail());
 				break;
 				
 			} catch (ConcurrentModificationException ConcurrentModification) {
@@ -209,10 +198,29 @@ public class PetitionEndpoint {
 		}
 		return signedPetition;
 	}
+
+	@ApiMethod(path="signatory/{petitionId}", name="getSignatory", httpMethod = HttpMethod.GET)
+	public List<Key> getSignatory(@Named("petitionId") String petitionId) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		Query qSignatory = new Query("Signatures");
+		qSignatory.setFilter(new FilterPredicate("petitions", FilterOperator.EQUAL, petitionId));
+		System.out.println(" : " + qSignatory.toString());
+
+
+
+		PreparedQuery pqSignatory = datastore.prepare(qSignatory);
+		List<Entity> resultSignatory = pqSignatory.asList(FetchOptions.Builder.withDefaults());
+		List<Key> userKey = new ArrayList<>();
+		for (Entity entity : resultSignatory) {
+			userKey.add(entity.getParent());
+		}
+		return userKey;
+	}
 	
 	
 	
-	@ApiMethod(path="petition", name="postPetition", httpMethod=HttpMethod.POST)
+	/*@ApiMethod(path="petition", name="postPetition", httpMethod=HttpMethod.POST)
 	public Entity postPetition(Entity petition, User user) throws UnauthorizedException {
 		
 		if (user  == null) {
@@ -226,5 +234,5 @@ public class PetitionEndpoint {
 		datastore.put(petition);
 		
 		return petition;
-	}
+	}*/
 }

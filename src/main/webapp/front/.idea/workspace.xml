@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a942d066-dfe1-4079-a2ac-10bc27b8a03f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../../.gcloudignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../petition.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../petition.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/perretpy/PetitionEndpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/perretpy/PetitionEndpoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/perretpy/PopulateServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/perretpy/PopulateServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/perretpy/Queries.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/perretpy/Queries.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/appengine-generated/datastore-indexes-auto.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/appengine-generated/datastore-indexes-auto.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/appengine-generated/local_db.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/appengine-generated/local_db.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/classes/perretpy/PopulateServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/classes/perretpy/PopulateServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/classes/perretpy/Queries.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/petition-1.0-SNAPSHOT/WEB-INF/classes/perretpy/Queries.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco-sessions.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco-sessions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/jacoco.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/PopulateServlet.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/PopulateServlet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/PopulateServlet.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/PopulateServlet.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/Queries.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/Queries.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/Queries.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/Queries.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/index.source.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/site/jacoco/perretpy/index.source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/surefire-reports/TEST-perretpy.HelloAppEngineTest-sponge_log.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/surefire-reports/TEST-perretpy.HelloAppEngineTest-sponge_log.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../target/surefire-reports/perretpy.HelloAppEngineTest-sponge_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../target/surefire-reports/perretpy.HelloAppEngineTest-sponge_log.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1sDsD8tDmaHsqKGsu5P6e9caDoV" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/services" />
+      <recent name="$PROJECT_DIR$/src/app" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.Angular CLI Server">
+    <configuration name="Tests (petition-front)" type="JavaScriptTestRunnerKarma">
+      <config-file value="$PROJECT_DIR$/karma.conf.js" />
+      <working-directory value="$PROJECT_DIR$" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="E2E Tests (petition-front)" type="JavaScriptTestRunnerProtractor">
+      <config-file value="$PROJECT_DIR$/e2e/protractor.conf.js" />
+      <node-interpreter value="project" />
+      <protractor-options value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular Application" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular CLI Server" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a942d066-dfe1-4079-a2ac-10bc27b8a03f" name="Default Changelist" comment="" />
+      <created>1620418374071</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1620418374071</updated>
+      <workItem from="1620418375816" duration="11926000" />
+      <workItem from="1620490246838" duration="91000" />
+      <workItem from="1620565016026" duration="14048000" />
+      <workItem from="1620594529201" duration="91000" />
+      <workItem from="1620671792684" duration="7378000" />
+      <workItem from="1620730705931" duration="6699000" />
+      <workItem from="1620807048115" duration="45418000" />
+      <workItem from="1621154989932" duration="3805000" />
+      <workItem from="1621271547645" duration="5011000" />
+      <workItem from="1621324068850" duration="11795000" />
+      <workItem from="1621503795531" duration="1302000" />
+      <workItem from="1623155784281" duration="872000" />
+      <workItem from="1624038198823" duration="2222000" />
+    </task>
+    <task id="LOCAL-00001" summary="7-1 pattern + navbar">
+      <created>1620425056064</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1620425056066</updated>
+    </task>
+    <task id="LOCAL-00002" summary="mise en place petitionService et HttpClient">
+      <created>1620594586001</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1620594586001</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="7-1 pattern + navbar" />
+    <MESSAGE value="mise en place petitionService et HttpClient" />
+    <option name="LAST_COMMIT_MESSAGE" value="mise en place petitionService et HttpClient" />
+  </component>
+</project>

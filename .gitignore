@@ -1,3 +1,4 @@
-/target/
 /src/main/webapp/front/node_modules/
+/target/
 /src/main/webapp/front/node/
+

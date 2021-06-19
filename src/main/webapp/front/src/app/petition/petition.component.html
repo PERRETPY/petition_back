@@ -1,5 +1,0 @@
-<h2>{{ petition.properties.title }}</h2>
-<p>{{ petition.properties.description }}</p>
-
-<button *ngIf="user != null" (click)="signPetition()">Signer cette pétition</button>
-<button *ngIf="user == null" routerLink="/connection">Signer cette pétition</button>

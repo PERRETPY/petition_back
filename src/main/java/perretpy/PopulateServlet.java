@@ -131,7 +131,9 @@ public class PopulateServlet extends HttpServlet {
 				try {
 					Entity e1=datastore.get(e.getKey());
 					Long nbSignature = (Long) e1.getProperty("nbSignature");
-					e1.setProperty("nbSignatures", nbSignature++);
+					nbSignature = nbSignature + 1;
+					e1.setProperty("nbSignature", nbSignature++);
+					response.getWriter().print("Pet : " + petitionKey + "nbSiganture : " + nbSignature);
 					datastore.put(e1);
 				} catch (EntityNotFoundException e1) {
 					// TODO Auto-generated catch block

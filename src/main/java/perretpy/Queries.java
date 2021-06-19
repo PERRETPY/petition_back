@@ -86,7 +86,7 @@ public class Queries extends HttpServlet {
 
 		response.getWriter().print("<li> result:" + resultpet.size() + "<br>");
 		for (Entity entity : resultpet) {
-		    response.getWriter().print(entity.getProperty("title")+ " | " + entity.getProperty("name") +"<br>");
+		    response.getWriter().print(entity.getProperty("title")+ " | " + entity.getProperty("nbSignature") +"<br>");
 		}
 		long t3=System.currentTimeMillis();
 		
