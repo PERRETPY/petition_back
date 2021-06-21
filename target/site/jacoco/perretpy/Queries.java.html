@@ -99,8 +99,8 @@ import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 <span class="nc" id="L99">		response.getWriter().print(&quot;&lt;h2&gt; Q4: now just print petitions with tag Environnement (titre and tag projected) &lt;/h2&gt;&quot;);</span>
 		
 <span class="nc" id="L101">		Query qpetTag = new Query(&quot;Petition&quot;);</span>
-<span class="nc" id="L102">		System.out.println(&quot;Q4 : &quot; + qpetTag.toString());</span>
-<span class="nc" id="L103">		qpetTag.setFilter(new FilterPredicate(&quot;tag&quot;, FilterOperator.EQUAL, &quot;Environnement&quot;));</span>
+<span class="nc" id="L102">		qpetTag.setFilter(new FilterPredicate(&quot;tag&quot;, FilterOperator.EQUAL, &quot;#Environnement&quot;));</span>
+<span class="nc" id="L103">		System.out.println(&quot;Q4 : &quot; + qpetTag.toString());</span>
 		//qpetTag.addProjection(new PropertyProjection(&quot;titre&quot;, String.class));
 		
 <span class="nc" id="L106">		PreparedQuery pqpetTag = datastore.prepare(qpetTag);</span>

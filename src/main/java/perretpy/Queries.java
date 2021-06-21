@@ -99,8 +99,8 @@ public class Queries extends HttpServlet {
 		response.getWriter().print("<h2> Q4: now just print petitions with tag Environnement (titre and tag projected) </h2>");
 		
 		Query qpetTag = new Query("Petition");
+		qpetTag.setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, "#Environnement"));
 		System.out.println("Q4 : " + qpetTag.toString());
-		qpetTag.setFilter(new FilterPredicate("tag", FilterOperator.EQUAL, "Environnement"));
 		//qpetTag.addProjection(new PropertyProjection("titre", String.class));
 		
 		PreparedQuery pqpetTag = datastore.prepare(qpetTag);

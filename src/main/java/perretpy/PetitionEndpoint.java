@@ -1,11 +1,9 @@
 package perretpy;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
-import com.google.api.server.spi.auth.common.User;
+//import com.google.api.server.spi.auth.common.User;
+import com.google.appengine.api.users.User;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -17,6 +15,17 @@ import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+//import com.google.appengine.api.datastore.Query.PropertyFilter;
+//import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
+import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
+import endpoints.repackaged.com.google.api.Http;
+
+//import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
+import com.google.appengine.repackaged.com.google.datastore.v1.Projection;
+import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
+
 
 @Api(name = "petitionEndpoint",
 	version = "v1",
@@ -123,12 +132,11 @@ public class PetitionEndpoint {
 	@ApiMethod(path="signedPetition", name="signedPetition", httpMethod=HttpMethod.GET)
 	public List signedPetition(User user) throws UnauthorizedException {
 
-		/*if (user == null) {
+		if (user == null) {
 			throw new UnauthorizedException("Invalid credentials");
-		}*/
+		}
 
-		String key = "first22.last22@exemple.com";
-		Key userKey = KeyFactory.createKey("User", key);
+		Key userKey = KeyFactory.createKey("User", user.getEmail());
 		List<Entity> result = new ArrayList();
 
 		Query signatures = new Query("Signatures");
@@ -187,7 +195,7 @@ public class PetitionEndpoint {
 
 
 
-				Key userKey = KeyFactory.createKey("User", "first22.last22@exemple.com");
+				Key userKey = KeyFactory.createKey("User", user.getEmail());
 
 				Query signatures = new Query("Signatures");
 				signatures.setAncestor(userKey);
@@ -247,7 +255,7 @@ public class PetitionEndpoint {
 	
 	
 	
-	/*@ApiMethod(path="petition", name="postPetition", httpMethod=HttpMethod.POST)
+	@ApiMethod(path="petition", name="postPetition", httpMethod=HttpMethod.POST)
 	public Entity postPetition(Entity petition, User user) throws UnauthorizedException {
 		
 		if (user  == null) {
@@ -261,5 +269,78 @@ public class PetitionEndpoint {
 		datastore.put(petition);
 		
 		return petition;
-	}*/
+	}
+
+	@ApiMethod(path="search", name="search", httpMethod = HttpMethod.GET)
+	public CollectionResponse<Entity> search(@Named("query") String query, @Nullable @Named("next") String cursorString) {
+
+		String SEPARATEUR = " ";
+
+		String mots[] = query.split(SEPARATEUR);
+		ArrayList<String> words= new ArrayList<>();
+		String title = "";
+
+		Query q = new Query("Petition");
+		Boolean firstWord = true;
+
+		ArrayList<FilterPredicate> filters = new ArrayList<FilterPredicate>();
+
+		for (String mot : mots) {
+			if(mot.charAt(0) == '#') {
+				filters.add(new FilterPredicate("tag", FilterOperator.EQUAL, mot));
+			}else {
+				if (firstWord) { title += mot; }else {title += mot + " "; };
+				firstWord = false;
+			}
+		}
+
+		if(!firstWord) { filters.add(new FilterPredicate("title", FilterOperator.EQUAL, title)); }
+
+		FilterPredicate[] tabs = filters.toArray(new FilterPredicate[0]);
+
+		if (filters.size() > 1) {
+			q.setFilter(CompositeFilterOperator.and(tabs));
+		} else {
+			q.setFilter(filters.get(0));
+		}
+
+
+
+		System.out.println(q.toString());
+
+		//q.addSort("nbSignature", Query.SortDirection.DESCENDING);
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		PreparedQuery pq = datastore.prepare(q);
+
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(4);
+
+		if (cursorString != null) {
+			fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
+		}
+
+		QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+
+		cursorString = results.getCursor().toWebSafeString();
+
+		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
+	}
+
+	@ApiMethod(path="newConnection", name="newConnection", httpMethod = HttpMethod.GET)
+	public void newConnection(User user) throws UnauthorizedException {
+
+		if (user  == null) {
+			throw new UnauthorizedException("Invalid credentials");
+		}
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Entity searchEntity=new Entity("User", user.getEmail());
+		try {
+			datastore.get(searchEntity.getKey());
+		} catch (EntityNotFoundException EntityNotFound) {
+			Entity newSignature  = new Entity("Signatures", searchEntity.getKey());
+			datastore.put(searchEntity);
+			datastore.put(newSignature);
+		}
+	}
 }

@@ -37,8 +37,8 @@ public class PopulateServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		
 		//tag from change.org web site
-		String [] tagList = {"Animaux", "Environnement", "Justice économique", "Politique", "Santé", "Près de vous", "Droits des femmes",
-				"Droits des migrants", "Justice pénale", "Education", "Handicap", "Droits humains", "Famille", "Patrimoine", "Autre"};
+		String [] tagList = {"#Animaux", "#Environnement", "#JusticeEconomique", "#Politique", "#Sante", "#PresDeVous", "#DroitsDesFemmes",
+				"#DroitsDesMigrants", "#JusticePenale", "#Education", "#Handicap", "#DroitsHumains", "#Famille", "#Patrimoine", "#Autre"};
 
 		Random r = new Random();
 		Random nbSignatoriesR = new Random();
@@ -88,7 +88,11 @@ public class PopulateServlet extends HttpServlet {
 			Entity p = new Entity("Petition", key);
 			p.setProperty("title", title + j);
 			p.setProperty("description", "Ceci est la description de la pétition " + j);
-			p.setProperty("tag", tagList[r.nextInt(tagList.length)]);
+			HashSet<String> fset = new HashSet<String>();
+			while (fset.size() < nbSignatoriesR.nextInt(3)) {
+				fset.add(tagList[r.nextInt(tagList.length)]);
+			}
+			p.setProperty("tag", fset);
 			p.setProperty("nbSignature", (long)0);
 			
 			
