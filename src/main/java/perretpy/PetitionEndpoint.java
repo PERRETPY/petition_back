@@ -291,7 +291,7 @@ public class PetitionEndpoint {
 	@ApiMethod(path="petition", name="postPetition", httpMethod=HttpMethod.POST)
 	public Entity postPetition(Petition petition, User user)  {
 		
-		System.out.println("Hello from postpetition");
+		System.out.println("Hello from postpetition : " + petition.getTag().toString());
 		Long max = 999999999999999L;
 		Long millis = max - System.currentTimeMillis();
 
@@ -300,7 +300,7 @@ public class PetitionEndpoint {
 		Entity newPetition = new Entity("Petition", key);
 		newPetition.setProperty("title", petition.getTitle());
 		newPetition.setProperty("description", petition.getDescription());
-		newPetition.setProperty("tag", petition.getTags());
+		newPetition.setProperty("tag", petition.getTag());
 		newPetition.setProperty("owner", user.getEmail());
 		newPetition.setProperty("nbSignature", 0);
 

@@ -1,9 +1,11 @@
 package perretpy;
 
+import java.util.HashSet;
+
 public class Petition {
     private String title;
     private String description;
-    private String tags[];
+    private HashSet<String> tag;
 
     public String getTitle() {
         return title;
@@ -21,11 +23,11 @@ public class Petition {
         this.description = description;
     }
 
-    public String[] getTags() {
-        return tags;
+    public HashSet<String> getTag() {
+        return tag;
     }
 
-    public void setTags(String[] tags) {
-        this.tags = tags;
+    public void setTags(HashSet<String> tag) {
+        this.tag = tag;
     }
 }
