@@ -2,10 +2,8 @@ package perretpy;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.annotation.WebServlet;
@@ -73,6 +71,18 @@ public class PopulateServlet extends HttpServlet {
 		for (int j=0 ; j<nbPetitions ; j++) {
 			//Creation of a random petition creation date for entity key to facilitate sort petition by creation date 
 			LocalDate petitionCreation = randomDateBetween(startDate, endDate);
+			ZoneId defaultZoneId = ZoneId.systemDefault();
+
+
+			Date date = Date.from(petitionCreation.atStartOfDay(defaultZoneId).toInstant());
+			Long millis = date.getTime();
+
+
+			Long max = 999999999999999L;
+			millis = max - millis;
+
+			String key = millis + ":" + j;
+
 			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();
 			//Force the petition number to be on two digits to facilitate sort by title
 			String title = "titrePetition";
@@ -80,7 +90,6 @@ public class PopulateServlet extends HttpServlet {
 			
 			
 			//Add key to tab for random signature and to add owner
-			String key = reverseDatePetitionCreation + "p" + j;
 			allPetitions.add(key);
 			
 			

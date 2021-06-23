@@ -2,10 +2,8 @@
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.annotation.WebServlet;
@@ -23,150 +21,161 @@ import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings(&quot;serial&quot;)
 @WebServlet(name = &quot;PopulateServlet&quot;, urlPatterns = { &quot;/populate&quot; })
-<span class="nc" id="L26">public class PopulateServlet extends HttpServlet {</span>
+<span class="nc" id="L24">public class PopulateServlet extends HttpServlet {</span>
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-<span class="nc" id="L31">		int nbUsers = 100;</span>
-<span class="nc" id="L32">		int nbPetitions = 50;</span>
-<span class="nc" id="L33">		LocalDate startDate = LocalDate.of(2010, 1, 1); //start date for date of user creation</span>
-<span class="nc" id="L34">		LocalDate endDate = LocalDate.now(); //end date for date of user creation</span>
+<span class="nc" id="L29">		int nbUsers = 100;</span>
+<span class="nc" id="L30">		int nbPetitions = 50;</span>
+<span class="nc" id="L31">		LocalDate startDate = LocalDate.of(2010, 1, 1); //start date for date of user creation</span>
+<span class="nc" id="L32">		LocalDate endDate = LocalDate.now(); //end date for date of user creation</span>
 
-<span class="nc" id="L36">		response.setContentType(&quot;text/html&quot;);</span>
-<span class="nc" id="L37">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L34">		response.setContentType(&quot;text/html&quot;);</span>
+<span class="nc" id="L35">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
 		
 		//tag from change.org web site
-<span class="nc" id="L40">		String [] tagList = {&quot;#Animaux&quot;, &quot;#Environnement&quot;, &quot;#JusticeEconomique&quot;, &quot;#Politique&quot;, &quot;#Sante&quot;, &quot;#PresDeVous&quot;, &quot;#DroitsDesFemmes&quot;,</span>
+<span class="nc" id="L38">		String [] tagList = {&quot;#Animaux&quot;, &quot;#Environnement&quot;, &quot;#JusticeEconomique&quot;, &quot;#Politique&quot;, &quot;#Sante&quot;, &quot;#PresDeVous&quot;, &quot;#DroitsDesFemmes&quot;,</span>
 				&quot;#DroitsDesMigrants&quot;, &quot;#JusticePenale&quot;, &quot;#Education&quot;, &quot;#Handicap&quot;, &quot;#DroitsHumains&quot;, &quot;#Famille&quot;, &quot;#Patrimoine&quot;, &quot;#Autre&quot;};
 
-<span class="nc" id="L43">		Random r = new Random();</span>
-<span class="nc" id="L44">		Random nbSignatoriesR = new Random();</span>
-<span class="nc" id="L45">		ArrayList&lt;String&gt; allPetitions = new ArrayList&lt;String&gt;();</span>
-<span class="nc" id="L46">		ArrayList&lt;String&gt; allUsers = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L41">		Random r = new Random();</span>
+<span class="nc" id="L42">		Random nbSignatoriesR = new Random();</span>
+<span class="nc" id="L43">		ArrayList&lt;String&gt; allPetitions = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L44">		ArrayList&lt;String&gt; allUsers = new ArrayList&lt;String&gt;();</span>
 		
-<span class="nc" id="L48">		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
+<span class="nc" id="L46">		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();</span>
 		
 		
 		//Delete all the datastore
-<span class="nc" id="L52">		Query petitions = new Query(&quot;Petition&quot;);</span>
-<span class="nc" id="L53">		PreparedQuery ppetitions = datastore.prepare(petitions);</span>
-<span class="nc" id="L54">		List&lt;Entity&gt; resultPetitions = ppetitions.asList(FetchOptions.Builder.withDefaults());</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">		for (Entity entity : resultPetitions) {</span>
-<span class="nc" id="L56">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L57">		}</span>
-<span class="nc" id="L58">		Query users = new Query(&quot;User&quot;);</span>
-<span class="nc" id="L59">		PreparedQuery pusers = datastore.prepare(users);</span>
-<span class="nc" id="L60">		List&lt;Entity&gt; resultUsers = pusers.asList(FetchOptions.Builder.withDefaults());</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">		for (Entity entity : resultUsers) {</span>
-<span class="nc" id="L62">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L63">		}</span>
-<span class="nc" id="L64">		Query signatures = new Query(&quot;Signatures&quot;);</span>
-<span class="nc" id="L65">		PreparedQuery psignatures = datastore.prepare(signatures);</span>
-<span class="nc" id="L66">		List&lt;Entity&gt; resultSignatures = psignatures.asList(FetchOptions.Builder.withDefaults());</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (Entity entity : resultSignatures) {</span>
-<span class="nc" id="L68">			datastore.delete(entity.getKey());			</span>
-<span class="nc" id="L69">		}</span>
+<span class="nc" id="L50">		Query petitions = new Query(&quot;Petition&quot;);</span>
+<span class="nc" id="L51">		PreparedQuery ppetitions = datastore.prepare(petitions);</span>
+<span class="nc" id="L52">		List&lt;Entity&gt; resultPetitions = ppetitions.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		for (Entity entity : resultPetitions) {</span>
+<span class="nc" id="L54">			datastore.delete(entity.getKey());			</span>
+<span class="nc" id="L55">		}</span>
+<span class="nc" id="L56">		Query users = new Query(&quot;User&quot;);</span>
+<span class="nc" id="L57">		PreparedQuery pusers = datastore.prepare(users);</span>
+<span class="nc" id="L58">		List&lt;Entity&gt; resultUsers = pusers.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		for (Entity entity : resultUsers) {</span>
+<span class="nc" id="L60">			datastore.delete(entity.getKey());			</span>
+<span class="nc" id="L61">		}</span>
+<span class="nc" id="L62">		Query signatures = new Query(&quot;Signatures&quot;);</span>
+<span class="nc" id="L63">		PreparedQuery psignatures = datastore.prepare(signatures);</span>
+<span class="nc" id="L64">		List&lt;Entity&gt; resultSignatures = psignatures.asList(FetchOptions.Builder.withDefaults());</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		for (Entity entity : resultSignatures) {</span>
+<span class="nc" id="L66">			datastore.delete(entity.getKey());			</span>
+<span class="nc" id="L67">		}</span>
 		
 		
 		//Create [nbPetitions] petitions
-<span class="nc bnc" id="L73" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		for (int j=0 ; j&lt;nbPetitions ; j++) {</span>
 			//Creation of a random petition creation date for entity key to facilitate sort petition by creation date 
-<span class="nc" id="L75">			LocalDate petitionCreation = randomDateBetween(startDate, endDate);</span>
-<span class="nc" id="L76">			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();</span>
+<span class="nc" id="L73">			LocalDate petitionCreation = randomDateBetween(startDate, endDate);</span>
+<span class="nc" id="L74">			ZoneId defaultZoneId = ZoneId.systemDefault();</span>
+
+
+<span class="nc" id="L77">			Date date = Date.from(petitionCreation.atStartOfDay(defaultZoneId).toInstant());</span>
+<span class="nc" id="L78">			Long millis = date.getTime();</span>
+
+
+<span class="nc" id="L81">			Long max = 999999999999999L;</span>
+<span class="nc" id="L82">			millis = max - millis;</span>
+
+<span class="nc" id="L84">			String key = millis + &quot;:&quot; + j;</span>
+
+<span class="nc" id="L86">			String reverseDatePetitionCreation = new StringBuilder(petitionCreation.toString()).reverse().toString();</span>
 			//Force the petition number to be on two digits to facilitate sort by title
-<span class="nc" id="L78">			String title = &quot;titrePetition&quot;;</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">			if (j&lt;10) { title += &quot;0&quot;; }; </span>
+<span class="nc" id="L88">			String title = &quot;titrePetition&quot;;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">			if (j&lt;10) { title += &quot;0&quot;; }; </span>
 			
 			
 			//Add key to tab for random signature and to add owner
-<span class="nc" id="L83">			String key = reverseDatePetitionCreation + &quot;p&quot; + j;</span>
-<span class="nc" id="L84">			allPetitions.add(key);</span>
+<span class="nc" id="L93">			allPetitions.add(key);</span>
 			
 			
 			//Petition creation
-<span class="nc" id="L88">			Entity p = new Entity(&quot;Petition&quot;, key);</span>
-<span class="nc" id="L89">			p.setProperty(&quot;title&quot;, title + j);</span>
-<span class="nc" id="L90">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
-<span class="nc" id="L91">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(3)) {</span>
-<span class="nc" id="L93">				fset.add(tagList[r.nextInt(tagList.length)]);</span>
+<span class="nc" id="L97">			Entity p = new Entity(&quot;Petition&quot;, key);</span>
+<span class="nc" id="L98">			p.setProperty(&quot;title&quot;, title + j);</span>
+<span class="nc" id="L99">			p.setProperty(&quot;description&quot;, &quot;Ceci est la description de la pétition &quot; + j);</span>
+<span class="nc" id="L100">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(3)) {</span>
+<span class="nc" id="L102">				fset.add(tagList[r.nextInt(tagList.length)]);</span>
 			}
-<span class="nc" id="L95">			p.setProperty(&quot;tag&quot;, fset);</span>
-<span class="nc" id="L96">			p.setProperty(&quot;nbSignature&quot;, (long)0);</span>
+<span class="nc" id="L104">			p.setProperty(&quot;tag&quot;, fset);</span>
+<span class="nc" id="L105">			p.setProperty(&quot;nbSignature&quot;, (long)0);</span>
 			
 			
 			//Put petition into data store
-<span class="nc" id="L100">			datastore.put(p);</span>
-<span class="nc" id="L101">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L109">			datastore.put(p);</span>
+<span class="nc" id="L110">			response.getWriter().print(&quot;&lt;li&gt; created petition:&quot; + p.getKey() + &quot;Signataire : &quot; + p.getProperty(&quot;signatories&quot;) + &quot;&lt;br&gt;&quot;);</span>
 		}
 		
 		
 		//Create [nbUsers] user
-<span class="nc bnc" id="L106" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		for (int i=0 ; i&lt;nbUsers ; i++) {</span>
 			//Creation of a random user creation date for entity key to facilitate sort users by creation date 
-<span class="nc" id="L108">			LocalDate userCreation = randomDateBetween(startDate, endDate);</span>
-<span class="nc" id="L109">			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();</span>
+<span class="nc" id="L117">			LocalDate userCreation = randomDateBetween(startDate, endDate);</span>
+<span class="nc" id="L118">			String reverseDateUserCreation = new StringBuilder(userCreation.toString()).reverse().toString();</span>
 			
 			
 			//Add key to tab for random signature and to add owner
-<span class="nc" id="L113">			String key = &quot;first&quot; + i + &quot;.last&quot; + i + &quot;@exemple.com&quot;;</span>
-<span class="nc" id="L114">			allUsers.add(key);</span>
+<span class="nc" id="L122">			String key = &quot;first&quot; + i + &quot;.last&quot; + i + &quot;@exemple.com&quot;;</span>
+<span class="nc" id="L123">			allUsers.add(key);</span>
 			
 			//User creation
-<span class="nc" id="L117">			Entity u = new Entity(&quot;User&quot;, key);</span>
-<span class="nc" id="L118">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
-<span class="nc" id="L119">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
+<span class="nc" id="L126">			Entity u = new Entity(&quot;User&quot;, key);</span>
+<span class="nc" id="L127">			u.setProperty(&quot;firstName&quot;, &quot;first&quot; + i);</span>
+<span class="nc" id="L128">			u.setProperty(&quot;lastName&quot;, &quot;last&quot; + i);</span>
 		    
 			
 			//Put user into data store
-<span class="nc" id="L123">			datastore.put(u);</span>
-<span class="nc" id="L124">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
+<span class="nc" id="L132">			datastore.put(u);</span>
+<span class="nc" id="L133">			response.getWriter().print(&quot;&lt;li&gt; created user:&quot; + u.getKey() + &quot;&lt;br&gt;&quot;);</span>
 			
 			
 			//Signatures creation
-<span class="nc" id="L128">			Entity signatureBloc = new Entity(&quot;Signatures&quot;, u.getKey());</span>
-<span class="nc" id="L129">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(20)) {</span>
-<span class="nc" id="L131">				String petitionKey = allPetitions.get(r.nextInt(allPetitions.size())).toString();</span>
-<span class="nc" id="L132">				fset.add(petitionKey);</span>
+<span class="nc" id="L137">			Entity signatureBloc = new Entity(&quot;Signatures&quot;, u.getKey());</span>
+<span class="nc" id="L138">			HashSet&lt;String&gt; fset = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">			while (fset.size() &lt; nbSignatoriesR.nextInt(20)) {</span>
+<span class="nc" id="L140">				String petitionKey = allPetitions.get(r.nextInt(allPetitions.size())).toString();</span>
+<span class="nc" id="L141">				fset.add(petitionKey);</span>
 				
-<span class="nc" id="L134">				Entity e=new Entity(&quot;Petition&quot;, petitionKey);</span>
+<span class="nc" id="L143">				Entity e=new Entity(&quot;Petition&quot;, petitionKey);</span>
 				try {
-<span class="nc" id="L136">					Entity e1=datastore.get(e.getKey());</span>
-<span class="nc" id="L137">					Long nbSignature = (Long) e1.getProperty(&quot;nbSignature&quot;);</span>
-<span class="nc" id="L138">					nbSignature = nbSignature + 1;</span>
-<span class="nc" id="L139">					e1.setProperty(&quot;nbSignature&quot;, nbSignature++);</span>
-<span class="nc" id="L140">					response.getWriter().print(&quot;Pet : &quot; + petitionKey + &quot;nbSiganture : &quot; + nbSignature);</span>
-<span class="nc" id="L141">					datastore.put(e1);</span>
-<span class="nc" id="L142">				} catch (EntityNotFoundException e1) {</span>
+<span class="nc" id="L145">					Entity e1=datastore.get(e.getKey());</span>
+<span class="nc" id="L146">					Long nbSignature = (Long) e1.getProperty(&quot;nbSignature&quot;);</span>
+<span class="nc" id="L147">					nbSignature = nbSignature + 1;</span>
+<span class="nc" id="L148">					e1.setProperty(&quot;nbSignature&quot;, nbSignature++);</span>
+<span class="nc" id="L149">					response.getWriter().print(&quot;Pet : &quot; + petitionKey + &quot;nbSiganture : &quot; + nbSignature);</span>
+<span class="nc" id="L150">					datastore.put(e1);</span>
+<span class="nc" id="L151">				} catch (EntityNotFoundException e1) {</span>
 					// TODO Auto-generated catch block
-<span class="nc" id="L144">					e1.printStackTrace();</span>
-<span class="nc" id="L145">				}	</span>
-<span class="nc" id="L146">			}</span>
-<span class="nc" id="L147">			signatureBloc.setProperty(&quot;petitions&quot;, fset);</span>
+<span class="nc" id="L153">					e1.printStackTrace();</span>
+<span class="nc" id="L154">				}	</span>
+<span class="nc" id="L155">			}</span>
+<span class="nc" id="L156">			signatureBloc.setProperty(&quot;petitions&quot;, fset);</span>
 			
 			
 			//Put signature bloc into data store
-<span class="nc" id="L151">			datastore.put(signatureBloc);</span>
+<span class="nc" id="L160">			datastore.put(signatureBloc);</span>
 		}
 		
 		
 		//Add owner to all petitions
-<span class="nc bnc" id="L156" title="All 2 branches missed.">		for (int i=0 ; i&lt;allPetitions.size(); i++) {</span>
-<span class="nc" id="L157">			Entity petition = new Entity(&quot;Petition&quot;, allPetitions.get(i));</span>
-<span class="nc" id="L158">			String owner = allUsers.get(r.nextInt(allUsers.size()));</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">		for (int i=0 ; i&lt;allPetitions.size(); i++) {</span>
+<span class="nc" id="L166">			Entity petition = new Entity(&quot;Petition&quot;, allPetitions.get(i));</span>
+<span class="nc" id="L167">			String owner = allUsers.get(r.nextInt(allUsers.size()));</span>
 			
 			try {
-<span class="nc" id="L161">				Entity petitionDS = datastore.get(petition.getKey());</span>
-<span class="nc" id="L162">				petitionDS.setProperty(&quot;owner&quot;, owner);</span>
-<span class="nc" id="L163">				datastore.put(petitionDS);</span>
-<span class="nc" id="L164">			} catch (EntityNotFoundException e) {</span>
+<span class="nc" id="L170">				Entity petitionDS = datastore.get(petition.getKey());</span>
+<span class="nc" id="L171">				petitionDS.setProperty(&quot;owner&quot;, owner);</span>
+<span class="nc" id="L172">				datastore.put(petitionDS);</span>
+<span class="nc" id="L173">			} catch (EntityNotFoundException e) {</span>
 				// TODO Auto-generated catch block
-<span class="nc" id="L166">				e.printStackTrace();</span>
-<span class="nc" id="L167">			}</span>
+<span class="nc" id="L175">				e.printStackTrace();</span>
+<span class="nc" id="L176">			}</span>
 		}
-<span class="nc" id="L169">	}</span>
+<span class="nc" id="L178">	}</span>
 	
 	
 	/**
@@ -177,10 +186,10 @@ import com.google.appengine.api.datastore.Query;
 	* @return LocalDate between startDate and endDate
 	*/
 	public LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate){
-<span class="nc" id="L180">		long start = startDate.toEpochDay();</span>
-<span class="nc" id="L181">		long end = endDate.toEpochDay();</span>
-<span class="nc" id="L182">		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();</span>
-<span class="nc" id="L183">		return LocalDate.ofEpochDay(randomEpochDay);</span>
+<span class="nc" id="L189">		long start = startDate.toEpochDay();</span>
+<span class="nc" id="L190">		long end = endDate.toEpochDay();</span>
+<span class="nc" id="L191">		long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();</span>
+<span class="nc" id="L192">		return LocalDate.ofEpochDay(randomEpochDay);</span>
 	}
 	
 }
