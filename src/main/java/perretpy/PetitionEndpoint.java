@@ -95,7 +95,6 @@ public class PetitionEndpoint {
 		PreparedQuery psignatures = datastore.prepare(signatures);
 		
 		List<Entity> resultsignatures = psignatures.asList(FetchOptions.Builder.withDefaults());
-		System.out.println("Result Signature" + resultsignatures.toString());
 		Entity searchEntity;
 		Entity resultEntity;
 		ArrayList petitionSignedList = new ArrayList();
@@ -103,8 +102,6 @@ public class PetitionEndpoint {
 		for (Entity entity : resultsignatures) {
 			petitionSignedList = (ArrayList) entity.getProperty("petitions");
 			for (Object petitionSigned : petitionSignedList) {
-				System.out.println(petitionSigned.toString());
-				
 				searchEntity = new Entity("Petition",petitionSigned.toString());
 				try {
 					resultEntity = datastore.get(searchEntity.getKey());
@@ -263,7 +260,7 @@ public class PetitionEndpoint {
 	}
 
 	@ApiMethod(path="signatory/{petitionId}", name="getSignatory", httpMethod = HttpMethod.GET)
-	public List<Key> getSignatory(@Named("petitionId") String petitionId) {
+	public List<Entity> getSignatory(@Named("petitionId") String petitionId) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		Query qSignatory = new Query("Signatures");
@@ -274,9 +271,19 @@ public class PetitionEndpoint {
 
 		PreparedQuery pqSignatory = datastore.prepare(qSignatory);
 		List<Entity> resultSignatory = pqSignatory.asList(FetchOptions.Builder.withDefaults());
-		List<Key> userKey = new ArrayList<>();
+		List<Entity> userKey = new ArrayList<>();
 		for (Entity entity : resultSignatory) {
-			userKey.add(entity.getParent());
+			System.out.println(entity.getParent());
+			Entity resultEntity;
+			try {
+				resultEntity = datastore.get(entity.getParent());
+				System.out.println(resultEntity.getKey());
+			} catch (EntityNotFoundException EntityNotFound) {
+				// TODO Auto-generated catch block
+				EntityNotFound.printStackTrace();
+				resultEntity = null;
+			}
+			userKey.add(resultEntity);
 		}
 		return userKey;
 	}
